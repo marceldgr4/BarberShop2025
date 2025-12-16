@@ -14,7 +14,7 @@ struct ExploreView: View {
         NavigationStack{
             List{
                 Section("Branches"){
-                    ForEach(filteredBranches){_ in 
+                    ForEach(filteredBranches) { branch in
                         NavigationLink(destination: BranchDetailView( branch: branch)){
                             BranchRowItem(branch: branch)
                         }

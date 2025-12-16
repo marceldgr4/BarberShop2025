@@ -6,13 +6,35 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		47BBED5A2ECD7DD600DB258D /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED592ECD7DD600DB258D /* Auth */; };
+		47BBED5C2ECD7DD600DB258D /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED5B2ECD7DD600DB258D /* Functions */; };
+		47BBED5E2ECD7DD600DB258D /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED5D2ECD7DD600DB258D /* PostgREST */; };
+		47BBED602ECD7DD600DB258D /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED5F2ECD7DD600DB258D /* Realtime */; };
+		47BBED622ECD7DD600DB258D /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED612ECD7DD600DB258D /* Storage */; };
+		47BBED642ECD7DD600DB258D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 47BBED632ECD7DD600DB258D /* Supabase */; settings = {ATTRIBUTES = (Required, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		47BBED472ECD7B4A00DB258D /* BarberShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarberShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		477A3E182ED8CC7C0047CAB9 /* Exceptions for "BarberShop" folder in "BarberShop" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 47BBED462ECD7B4A00DB258D /* BarberShop */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		47BBED492ECD7B4A00DB258D /* BarberShop */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				477A3E182ED8CC7C0047CAB9 /* Exceptions for "BarberShop" folder in "BarberShop" target */,
+			);
 			path = BarberShop;
 			sourceTree = "<group>";
 		};
@@ -23,6 +45,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47BBED5E2ECD7DD600DB258D /* PostgREST in Frameworks */,
+				47BBED5C2ECD7DD600DB258D /* Functions in Frameworks */,
+				47BBED642ECD7DD600DB258D /* Supabase in Frameworks */,
+				47BBED5A2ECD7DD600DB258D /* Auth in Frameworks */,
+				47BBED622ECD7DD600DB258D /* Storage in Frameworks */,
+				47BBED602ECD7DD600DB258D /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +93,12 @@
 			);
 			name = BarberShop;
 			packageProductDependencies = (
+				47BBED592ECD7DD600DB258D /* Auth */,
+				47BBED5B2ECD7DD600DB258D /* Functions */,
+				47BBED5D2ECD7DD600DB258D /* PostgREST */,
+				47BBED5F2ECD7DD600DB258D /* Realtime */,
+				47BBED612ECD7DD600DB258D /* Storage */,
+				47BBED632ECD7DD600DB258D /* Supabase */,
 			);
 			productName = BarberShop;
 			productReference = 47BBED472ECD7B4A00DB258D /* BarberShop.app */;
@@ -94,6 +128,9 @@
 			);
 			mainGroup = 47BBED3E2ECD7B4A00DB258D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 47BBED482ECD7B4A00DB258D /* Products */;
 			projectDirPath = "";
@@ -253,6 +290,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BarberShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +322,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BarberShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -328,6 +367,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		47BBED592ECD7DD600DB258D /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		47BBED5B2ECD7DD600DB258D /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		47BBED5D2ECD7DD600DB258D /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		47BBED5F2ECD7DD600DB258D /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		47BBED612ECD7DD600DB258D /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		47BBED632ECD7DD600DB258D /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47BBED582ECD7DD600DB258D /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 47BBED3F2ECD7B4A00DB258D /* Project object */;
 }
