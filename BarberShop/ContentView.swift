@@ -6,16 +6,34 @@
 //
 
 import SwiftUI
+import Supabase
+
+
 
 struct ContentView: View {
+    @StateObject private var authViewModel = AuthViewModel()
+    @State private var isAuthenticated = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if isAuthenticated {
+               // MainTabView()
+            } else {
+               // LoginView()
+            }
         }
-        .padding()
+        .environmentObject(authViewModel)
+        .task {
+            for await state in SupabaseManager.shared.client.auth.authStateChanges {
+                if [.initialSession, .signedIn, .signedOut].contains(state.event) {
+                    isAuthenticated = state.session != nil
+                    
+                    if isAuthenticated {
+                        //$authViewModel.clearFields
+                    }
+                }
+            }
+        }
     }
 }
 
