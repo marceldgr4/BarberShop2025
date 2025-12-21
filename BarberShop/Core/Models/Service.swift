@@ -11,10 +11,10 @@ struct Service: Identifiable, Codable, Hashable{
     let id: UUID
     let categoryId: UUID
     let name: String
-    let description: String
+    let description: String?
     let durationMinutes: Int
     let price: Double
-    let imageUrl: String
+    let imageUrl: String?
     let isActive: Bool
     let createdAt: Date
     let updatedAt: Date

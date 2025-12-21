@@ -20,12 +20,12 @@ struct Barber: Identifiable, Codable, Hashable {
     
     enum CodingKeys: String, CodingKey{
         case id, name
-        case branchId = " branch_id"
+        case branchId = "branch_id"
         case specialtyId = "specialty_id"
-        case photoUrl = "phote_url"
+        case photoUrl = "photo_url"
         case isActive = "is_active"
         case createdAt = "created_at"
-        case updatedAt = " updated_at"
+        case updatedAt = "updated_at"
         
         
     }
@@ -48,7 +48,7 @@ struct BarberRating: Codable {
         case id
         case barberId = "barber_id"
         case averageRating = "average_rating"
-        case totalReviews = "total_reviws"
+        case totalReviews = "total_reviews"
         case updatedAt = " updated_at"
     }
 }

@@ -1,13 +1,14 @@
-import  Foundation
+import Foundation
+import SwiftUI
 import MapKit
 import Combine
 
 @MainActor
 class HomeViewModel: ObservableObject {
-    @Published var branches: [Branch] = [ ]
-    @Published var services: [Service] = [ ]
-    @Published var promotions: [Promotion] = [ ]
-    @Published var feactureBarbers: [BarberWithRating] = [ ]
+    @Published var branches: [Branch] = []
+    @Published var services: [Service] = []
+    @Published var promotions: [Promotion] = []
+    @Published var featuredBarbers: [BarberWithRating] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var selectedBranch: Branch?
@@ -15,35 +16,44 @@ class HomeViewModel: ObservableObject {
         center: CLLocationCoordinate2D(latitude: 10.9878, longitude: -74.7889),
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
+    
     private let supabase = SupabaseManager.shared
     
     func loadHomeData() async {
         isLoading = true
-        do{
+        errorMessage = nil
+        
+        do {
             async let branchesTask = supabase.fetchBranches()
             async let servicesTask = supabase.fetchServices()
-            async let promotionTask = supabase.fetchActivePromotions()
+            async let promotionsTask = supabase.fetchActivePromotions()
             async let barbersTask = supabase.fetchBarbers()
             
             branches = try await branchesTask
             services = try await servicesTask
-            promotions = try await promotionTask
-            feactureBarbers = try await barbersTask
+            promotions = try await promotionsTask
+            featuredBarbers = try await barbersTask
             
-            if let firstBranch = branches.first{
+            // Center map on first branch
+            if let firstBranch = branches.first {
                 mapRegion.center = CLLocationCoordinate2D(
-                    latitude: firstBranch.latitude, longitude: firstBranch.longitude)
+                    latitude: firstBranch.latitude,
+                    longitude: firstBranch.longitude
+                )
             }
-        }catch {
+        } catch {
             errorMessage = error.localizedDescription
         }
+        
         isLoading = false
     }
-    func selectBranch(_ branch: Branch){
+    
+    func selectBranch(_ branch: Branch) {
         selectedBranch = branch
         mapRegion.center = CLLocationCoordinate2D(
-            latitude: branch.latitude, longitude: branch.longitude
+            latitude: branch.latitude,
+            longitude: branch.longitude
         )
+        mapRegion.span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     }
-    
 }

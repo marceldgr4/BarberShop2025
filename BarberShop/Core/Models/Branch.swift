@@ -24,9 +24,9 @@ struct Branch: Identifiable, Codable, Hashable{
         case id, name,    address, latitude, longitude,
          phone,  email
         case isActive = "is_active"
-        case imageUrl = "image_Url"
+        case imageUrl = "image_url"
         case createdAt = "created_at"
-        case updatedAt = "update_at"
+        case updatedAt = "updated_at"
     }
 }
 

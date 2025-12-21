@@ -17,7 +17,7 @@ struct Appointment: Identifiable, Codable{
     let appointmentDate: String
     let appointmentTime: String
     let totalPrice: Double
-    let notes:String
+    let notes:String?
     let createdAt: Date
     let updatedAt: Date
     

@@ -63,10 +63,10 @@ struct AppointmentRow: View {
     
     private func formatDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"  // ✅ FIX: Formato correcto de base de datos
+        formatter.dateFormat = "yyyy-MM-dd"
         guard let date = formatter.date(from: dateString) else { return dateString }
         
-        formatter.dateFormat = "MMM d, yyyy"  // ✅ FIX: Formato de salida correcto
+        formatter.dateFormat = "MMM d, yyyy"  
         return formatter.string(from: date)
     }
     

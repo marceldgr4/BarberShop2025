@@ -9,7 +9,7 @@ import Foundation
 struct Promotion: Identifiable, Codable{
     let id: UUID
     let title: String
-    let description: String
+    let description: String?
     let discountPercentage: Double?
     let startDate: String
     let endDate: String

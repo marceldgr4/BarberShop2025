@@ -30,9 +30,9 @@ struct ExploreView: View {
     }
     private var filteredBranches: [Branch]{
         if searchText.isEmpty{
-            return viewModel.braches
+            return viewModel.branches
         }
-        return viewModel.braches.filter{
+        return viewModel.branches.filter{
             $0.name.localizedCaseInsensitiveContains(searchText) ||
             $0.address.localizedCaseInsensitiveContains(searchText)
         }

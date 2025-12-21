@@ -17,20 +17,15 @@ struct ContentView: View {
     var body: some View {
         Group {
             if isAuthenticated {
-               // MainTabView()
+                MainTabView()
             } else {
-               // LoginView()
+                LoginView()
             }
         }
-        .environmentObject(authViewModel)
-        .task {
-            for await state in SupabaseManager.shared.client.auth.authStateChanges {
-                if [.initialSession, .signedIn, .signedOut].contains(state.event) {
+        .task{
+            for await state in SupabaseManager.shared.client.auth.authStateChanges{
+                if [.initialSession, .signedIn, .signedOut].contains(state.event){
                     isAuthenticated = state.session != nil
-                    
-                    if isAuthenticated {
-                        //$authViewModel.clearFields
-                    }
                 }
             }
         }
@@ -39,4 +34,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
 }
