@@ -44,7 +44,7 @@ class AppointmentViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/mm/yyyy"
+        formatter.dateFormat = "yyyy-mm-dd"
         let dateString = formatter.string(from: selectedDate)
         
         do {

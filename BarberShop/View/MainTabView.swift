@@ -1,46 +1,46 @@
-//
-//  MainTabView.swift
-//  BarberShop
-//
-//  Created by Marcel DiazGranados Robayo on 27/11/25.
-//
-/*
-
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var homeViewModel = HomeViewModel()
-
+    @StateObject private var homeViewModel = HomeViewModel()
+    @StateObject private var appointmentViewModel = AppointmentViewModel()
+    
     var body: some View {
         TabView {
             NavigationStack {
-                HomeView(viewModel: homeViewModel)
+                HomeView()
+                    .environmentObject(homeViewModel)
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
             }
+            
             NavigationStack {
-                ExploreView(barbers: homeViewModel.nearbyBarbers)
+                ExploreView()
             }
             .tabItem {
                 Label("Explore", systemImage: "map.fill")
             }
+            
             NavigationStack {
-                BookingViewPlaceholder(title: "Agendamineto")
+                AppointmentsView()
+                    .environmentObject(appointmentViewModel)
             }
             .tabItem {
-                Label("Agenda", systemImage: "calendar")
+                Label("Bookings", systemImage: "calendar")
             }
+            
             NavigationStack {
-                ProfileView()
-            }.tabItem {
-                Label("Perfil", systemImage: "person.crop.circle.fill")
+               // ProfileView()
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.crop.circle.fill")
             }
         }
+        .tint(Color(red: 238/255, green: 143/255, blue: 64/255)) // #EE8F40
     }
 }
 
 #Preview {
     MainTabView()
+        .environmentObject(AuthViewModel())
 }
-*/

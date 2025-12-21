@@ -33,7 +33,7 @@ struct ServiceCard: View {
                     .font(.headline)
                     .lineLimit(1)
                 HStack{
-                    Text("$(\(String(format: "%.3f", service.price)))")
+                    Text("$(\(String(format: "%.0f", service.price)))")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.blue)

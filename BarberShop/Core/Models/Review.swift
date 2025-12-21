@@ -13,7 +13,7 @@ struct Review: Identifiable, Codable{
     let barberId:UUID
     let appointmentId: UUID?
     let rating:Int
-    let comment: String
+    let comment: String?
     let createdAt: Date
     let updatedAt: Date
     

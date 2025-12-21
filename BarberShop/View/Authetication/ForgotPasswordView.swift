@@ -1,138 +1,192 @@
 //
-//  NewPasswordView.swift
+//  ForgotPasswordView.swift
 //  BarberShop
 //
-//  Created by Marcel DiazGranados Robayo on 19/11/25.
+//  Created by Marcel DiazGranados Robayo
 //
-/*
+
 import SwiftUI
 
-struct NewPasswordView: View {
-    @State private var newPassword = ""
-    @State private var confirmPassword = ""
-    
-    // Estados independientes para la visibilidad de cada campo
-    @State private var isNewPasswordVisible: Bool = false
-    @State private var isConfirmPasswordVisible: Bool = false
-    
-    @Environment(\.dismiss) var dismiss
+struct ForgotPasswordView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var email = ""
+    @State private var showSuccess = false
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("Background") // Asegúrate de tener este color en Assets
+                Color(.systemBackground)
                     .ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 30) {
                         
-                        // --- Header ---
-                        VStack(spacing: 10) {
-                            Text("New Password")
-                                .font(.system(size: 40, weight: .bold, design: .serif))
+                        // MARK: - Header
+                        VStack(spacing: 15) {
+                            Image(systemName: "envelope.circle.fill")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .foregroundStyle(Color.brandGradientVertical)
+                            
+                            Text("Reset Password")
+                                .font(.system(size: 32, weight: .bold, design: .rounded))
                                 .foregroundColor(.primary)
                             
-                            Text("Your new password must be different from previously used passwords.")
-                                .font(.system(size: 15, design: .serif))
+                            Text("Enter your email and we'll send you instructions to reset your password")
+                                .font(.subheadline)
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, 20)
+                                .padding(.horizontal)
                         }
                         .padding(.top, 40)
                         
-                        // --- Campos de Contraseña ---
-                        VStack(alignment: .leading, spacing: 25) {
+                        // MARK: - Form
+                        VStack(spacing: 20) {
                             
-                            // 1. Nueva Contraseña
+                            // Email Field
                             VStack(alignment: .leading, spacing: 8) {
-                                Label("Password:", systemImage: "lock")
-                                    .font(.headline)
+                                Label("Email Address", systemImage: "envelope.fill")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.primary)
                                 
                                 HStack {
-                                    if isNewPasswordVisible {
-                                        TextField("*******", text: $newPassword)
-                                    } else {
-                                        SecureField("*******", text: $newPassword)
-                                    }
+                                    Image(systemName: "envelope")
+                                        .foregroundColor(.gray)
+                                        .frame(width: 20)
                                     
-                                    Button(action: { isNewPasswordVisible.toggle() }) {
-                                        Image(systemName: isNewPasswordVisible ? "eye" : "eye.slash")
-                                            .foregroundColor(.gray)
-                                    }
+                                    TextField("ejemplo@email.com", text: $email)
+                                        .textInputAutocapitalization(.never)
+                                        .keyboardType(.emailAddress)
+                                        .autocorrectionDisabled()
                                 }
                                 .padding()
                                 .background(Color(.systemGray6))
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                                )
+                            }
+                            
+                            // Success Message
+                            if showSuccess {
+                                HStack(spacing: 10) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                        .font(.title3)
+                                    
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Email Sent!")
+                                            .font(.subheadline)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.green)
+                                        
+                                        Text("Check your inbox for reset instructions")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    }
+                                    
+                                    Spacer()
+                                }
+                                .padding()
+                                .background(Color.green.opacity(0.1))
+                                .cornerRadius(12)
+                                .transition(.scale.combined(with: .opacity))
+                            }
+                            
+                            // Error Message
+                            if let errorMessage = authViewModel.errorMessage {
+                                HStack {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(.red)
+                                    Text(errorMessage)
+                                        .font(.caption)
+                                        .foregroundColor(.red)
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color.red.opacity(0.1))
                                 .cornerRadius(8)
                             }
                             
-                            // 2. Confirmar Contraseña
-                            VStack(alignment: .leading, spacing: 8) {
-                                Label("Confirm Password:", systemImage: "lock.shield") // Icono diferente para diferenciar
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                
-                                HStack {
-                                    if isConfirmPasswordVisible {
-                                        TextField("*******", text: $confirmPassword)
-                                    } else {
-                                        SecureField("*******", text: $confirmPassword)
+                            // Send Reset Link Button
+                            Button(action: {
+                                Task {
+                                    await authViewModel.resetPassword(email: email)
+                                    withAnimation(.spring(response: 0.5)) {
+                                        showSuccess = true
                                     }
                                     
-                                    Button(action: { isConfirmPasswordVisible.toggle() }) {
-                                        Image(systemName: isConfirmPasswordVisible ? "eye" : "eye.slash")
-                                            .foregroundColor(.gray)
+                                    // Auto-dismiss después de 2.5 segundos
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                        dismiss()
                                     }
                                 }
-                                .padding()
-                                .background(Color(.systemGray6))
-                                .cornerRadius(8)
-                            }
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        // --- Botón de Acción ---
-                        Button(action: {
-                            // Validar que sean iguales antes de guardar
-                            if newPassword == confirmPassword && !newPassword.isEmpty {
-                                print("Contraseña actualizada correctamente")
-                                // Aquí navegarías al Login o al Home
-                            } else {
-                                print("Las contraseñas no coinciden")
-                            }
-                        }) {
-                            Text("Create New Password")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
+                            }) {
+                                HStack {
+                                    if authViewModel.isLoading {
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        Text("Sending...")
+                                            .fontWeight(.semibold)
+                                    } else {
+                                        Text("Send Reset Link")
+                                            .fontWeight(.bold)
+                                        Image(systemName: "paperplane.fill")
+                                    }
+                                }
+                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.yellow)
-                                .cornerRadius(30)
+                                .background(Color.brandGradient)
+                                .cornerRadius(12)
+                                .shadow(color: Color.brandOrange.opacity(0.3), radius: 8, y: 4)
+                            }
+                            .disabled(authViewModel.isLoading || !isEmailValid)
+                            .opacity((authViewModel.isLoading || !isEmailValid) ? 0.6 : 1.0)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 20)
+                        .padding(.horizontal, 25)
                         
                         Spacer()
+                        
+                        // MARK: - Back to Login
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "arrow.left")
+                                Text("Back to Sign In")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(Color.brandOrange)
+                        }
+                        .padding(.bottom, 30)
                     }
-                    .padding(.bottom, 20)
                 }
             }
-            // Botón para volver atrás (opcional, por si el usuario quiere cancelar)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.primary)
-                            .font(.title2)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                            .font(.title3)
                     }
                 }
             }
         }
     }
+    
+    private var isEmailValid: Bool {
+        !email.isEmpty && email.contains("@") && email.contains(".")
+    }
 }
 
 #Preview {
-    NewPasswordView()
+    ForgotPasswordView()
+        .environmentObject(AuthViewModel())
 }
-*/

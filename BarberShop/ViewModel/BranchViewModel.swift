@@ -10,7 +10,7 @@ import Combine
 
 @MainActor
 class BranchViewModel: ObservableObject {
-    @Published var braches: [Branch] = [ ]
+    @Published var branches: [Branch] = [ ]
     @Published var selectedBranch: Branch?
     @Published var branchHours: [BranchHours] = [ ]
     @Published var barbers: [BarberWithRating] = [ ]
@@ -23,7 +23,7 @@ class BranchViewModel: ObservableObject {
         isLoading = true
         
         do{
-            braches = try await supabase.fetchBranches()
+            branches = try await supabase.fetchBranches()
         }catch{
             errorMessage = error.localizedDescription
         }

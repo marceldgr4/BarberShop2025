@@ -16,7 +16,7 @@ final class SupabaseManager {
     
     private init(){
         let supabaseUrl: URL = URL(string: "https://vxcaadneaegpuqhtgkhz.supabase.co")!
-        let supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4Y2FhZG5lYWVncHVxaHRna2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MjA1MjYsImV4cCI6MjA3OTA5NjUyNn0.5oYbrcyYSQTcEiDi0zR6Umr5ZGKbjOFu-GsQs0SwcP0"
+        let supabaseKey = "sb_publishable_wCrOhPVWSmTjx4SNvbH44A_KyPkTYK4"
         
         client = SupabaseClient(
             supabaseURL: supabaseUrl,
@@ -63,8 +63,7 @@ final class SupabaseManager {
     }
     
     func  getCurrentUser() async throws -> User? {
-         let session = try await client.auth.session
-       
+        let session = try await client.auth.session
         
         let response = try await client
             .from("users")
@@ -128,9 +127,8 @@ final class SupabaseManager {
                     specialty_id,
                     name, 
                     photo_url,
-                    
                     is_active,
-                    barber_ratings!inner(averaga_rating, total_reviews)
+                    barber_ratings!inner(average_rating, total_reviews)
                     """)
             .eq("is_active", value: true)
         if let branchId = branchId {
@@ -191,7 +189,7 @@ final class SupabaseManager {
                                       appointmentDate: date,
                                       appointmentTime: time,
                                       totalPrice: price,
-                                      notes: notes!,
+                                      notes: notes,
                                       createdAt: Date(),
                                       updatedAt: Date()
         )
@@ -271,7 +269,7 @@ final class SupabaseManager {
                     barberId: barberId,
                     appointmentId: appointmentId,
                     rating: rating,
-                    comment: comment!,
+                    comment: comment,
                     createdAt: Date(),
                     updatedAt: Date()
                 )
