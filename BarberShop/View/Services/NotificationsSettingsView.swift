@@ -8,8 +8,16 @@
 import SwiftUI
 
 struct NotificationsSettingsView: View {
+    @State private var pushEnable = true
+    @State private var emailEnable = true
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Form{
+            Section("Notifications"){
+                Toggle("Push Notifications", isOn: $pushEnable)
+                Toggle("Email Notificaions", isOn: $emailEnable)
+            }
+        }
+        .navigationTitle("Notifications")
     }
 }
 

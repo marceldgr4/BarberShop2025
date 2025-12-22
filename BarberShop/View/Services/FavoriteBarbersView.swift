@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct FavoriteBarbersView: View {
+    let barbers: [BarberWithRating]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List(barbers) { barber in
+            NavigationLink(destination: BarberDetailView(barber: barber)) {
+                BarberRow(barber: barber)
+            }
+        }
+        .navigationTitle("Favorite Barbers")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-#Preview {
-    FavoriteBarbersView()
-}
+

@@ -76,16 +76,76 @@ struct ProfileView: View {
                 NavigationLink(destination: EditProfileView(user: viewModel.user)){
                     Label("Edit Profile", systemImage: "person.circle")
                 }
-                //NavigationLink(destination: NotificationsSettingsView()){
+                NavigationLink(destination: NotificationsSettingsView()){
                     Label("Notifications",systemImage: "bell")
                 }
-                //NavigationLink(destination: PrivacySettingsView()){
+                NavigationLink(destination: PrivacySettingsView()){
                     Label("Privacy", systemImage: "lock.shield")
                 }
             }
+            Section("Support"){
+                Link(destination: URL(string: "mailto:support@barberShop.com")!){
+                    Label("Contact Support", systemImage: "envelope")
+                }
+                NavigationLink(destination: AboutView()){
+                    Label("About", systemImage: "info.circle")
+                }
+            }
+            //MARK: Logout
+            Section{
+                Button(action: {
+                    showLogoutAlert = true
+                }){
+                    HStack{
+                        Spacer()
+                        Label("Sing Out", systemImage: "rectangle.portrait.and.arrow.right")
+                            .foregroundColor(.red)
+                        Spacer()
+                    }
+                }
+            }
         }
+        .navigationTitle("Profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .task{
+            if viewModel.user == nil{
+                await viewModel.loadProfile()
+            }
+                
+        }
+        .refreshable {
+            await viewModel.loadProfile()
+        }
+        .alert("Sign Out", isPresented: $showLogoutAlert){
+            Button("Cancel", role: .cancel){}
+            Button("Sign Out", role: .destructive){
+                Task{
+                    await authViewModel.signOut()
+                }
+            }
+            
+        } message: {
+                Text("are you sure you want to sugn out?")
+            }
+        
+        .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
+            Button("OK"){
+                viewModel.errorMessage = nil
+                
+            }
+        } message:{
+            if let error = viewModel.errorMessage{
+                Text(error)
+            }
+        }
+    }
+}
+
     
 #Preview {
-    ProfileView()
+    NavigationStack{
+        ProfileView()
+            .environmentObject(AuthViewModel())
+    }
 }
 

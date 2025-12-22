@@ -9,7 +9,13 @@ import SwiftUI
 
 struct PrivacySettingsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Form{
+            Section("Privacy"){
+                NavigationLink("Terms of Service", destination: Text("terms of services"))
+                NavigationLink("Privacy Policy", destination: Text("Privacy Policy"))
+            }
+        }
+        .navigationTitle("Privacy")
     }
 }
 
