@@ -30,7 +30,7 @@ struct MainTabView: View {
             }
             
             NavigationStack {
-               // ProfileView()
+                ProfileView()
             }
             .tabItem {
                 Label("Profile", systemImage: "person.crop.circle.fill")

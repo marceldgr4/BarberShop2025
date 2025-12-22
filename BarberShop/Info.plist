@@ -2,13 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Location Permissions -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to show nearby barbershops and provide personalized services.</string>
+	
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to show nearby barbershops and send you notifications about appointments.</string>
+	
+	<!-- Supabase Configuration -->
+	<key>SUPABASE_ANON_KEY</key>
+	<string>sb_publishable_wCrOhPVWSmTjx4SNvbH44A_KyPkTYK4</string>
+	
+	<key>SUPABASE_URL</key>
+	<string>https://vxcaadneaegpuqhtgkhz.supabase.co</string>
+	
+	<!-- URL Schemes -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>SUPABASE_ANON_KEY</key>
-			<string>sb_publishable_wCrOhPVWSmTjx4SNvbH44A_KyPkTYK4</string>
-			<key>SUPABASE_URL</key>
-			<string>https://vxcaadneaegpuqhtgkhz.supabase.co</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>barbershop</string>
+			</array>
 		</dict>
 	</array>
 </dict>
