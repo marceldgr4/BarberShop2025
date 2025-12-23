@@ -1,15 +1,18 @@
 import SwiftUI
 import MapKit
-import Combine
 import CoreLocation
+import Combine
 
 // MARK: - Location Manager
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    private let manager = CLLocationManager()
     
     @Published var cityName: String = "Finding Location..."
     @Published var authorizationStatus: CLAuthorizationStatus?
     @Published var userLocation: CLLocationCoordinate2D?
+   
+    
+
+    private let manager = CLLocationManager()
     
     override init() {
         super.init()
@@ -41,26 +44,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(latestLocation) { [weak self] placemarks, error in
             guard let self = self else { return }
-            
-            if let error = error {
-                print("Reverse geocoding error: \(error.localizedDescription)")
-                self.cityName = "Geolocation error"
-                return
-            }
-            
             if let city = placemarks?.first?.locality {
                 self.cityName = city
             } else if let country = placemarks?.first?.country {
                 self.cityName = country
             } else {
-                self.cityName = "Unknown place"
+                self.cityName = "Current Location"
             }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location Manager failed with error: \(error.localizedDescription)")
-        cityName = "GPS failed"
+        cityName = "Location Unavailable"
     }
 }
 
@@ -98,10 +93,7 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        // Notifications Button
-                        Button(action: {
-                            // TODO: Navigate to notifications
-                        }) {
+                        Button(action: {}) {
                             ZStack(alignment: .topTrailing) {
                                 Image(systemName: "bell.fill")
                                     .font(.title3)
@@ -110,7 +102,6 @@ struct HomeView: View {
                                     .background(Color(.systemGray6))
                                     .clipShape(Circle())
                                 
-                                // Badge for unread notifications
                                 Circle()
                                     .fill(Color.red)
                                     .frame(width: 8, height: 8)
@@ -125,7 +116,6 @@ struct HomeView: View {
                     HStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
-                            .imageScale(.medium)
                         
                         TextField("Search services, barbers...", text: $searchText)
                             .textInputAutocapitalization(.never)
@@ -143,20 +133,19 @@ struct HomeView: View {
                     .cornerRadius(15)
                     .padding(.horizontal)
                     
-                    // MARK: - Map with Branches
-                    if !viewModel.branches.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Image(systemName: "map.fill")
-                                    .foregroundColor(.brandOrange)
-                                    .imageScale(.medium)
-                                Text("Our Locations")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            
+                    // MARK: - Map Section (SIEMPRE VISIBLE)
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "map.fill")
+                                .foregroundColor(.brandOrange)
+                            Text("Our Locations")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                        }
+                        .padding(.horizontal)
+                        
+                        if !viewModel.branches.isEmpty {
+                            // Con datos reales
                             Map(coordinateRegion: $viewModel.mapRegion,
                                 annotationItems: viewModel.branches) { branch in
                                 MapAnnotation(coordinate: CLLocationCoordinate2D(
@@ -170,31 +159,62 @@ struct HomeView: View {
                             }
                             .frame(height: 200)
                             .cornerRadius(15)
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                            .shadow(color: .black.opacity(0.1), radius: 5)
                             .padding(.horizontal)
                             
-                            // Selected Branch Card
                             if let selectedBranch = viewModel.selectedBranch {
                                 NavigationLink(destination: BranchDetailView(branch: selectedBranch)) {
                                     BranchRowItem(branch: selectedBranch)
                                         .padding(.horizontal)
-                                        .transition(.move(edge: .bottom).combined(with: .opacity))
                                 }
                             }
+                        } else {
+                            // Placeholder cuando no hay datos
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color(.systemGray6))
+                                    .frame(height: 200)
+                                
+                                VStack(spacing: 12) {
+                                    Image(systemName: "map")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.gray)
+                                    
+                                    if viewModel.isLoading {
+                                        ProgressView()
+                                            .tint(.brandOrange)
+                                        Text("Loading locations...")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    } else {
+                                        Text("No locations available")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                        
+                                        Button("Refresh") {
+                                            Task {
+                                                await viewModel.loadHomeData()
+                                            }
+                                        }
+                                        .font(.caption)
+                                        .foregroundColor(.brandOrange)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
                         }
                     }
                     
-                    // MARK: - Promotions Carousel
-                    if !viewModel.promotions.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Image(systemName: "tag.fill")
-                                    .foregroundColor(.brandOrange)
-                                    .imageScale(.medium)
-                                Text("Special Offers")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                Spacer()
+                    // MARK: - Promotions Section (SIEMPRE VISIBLE)
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "tag.fill")
+                                .foregroundColor(.brandOrange)
+                            Text("Special Offers")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                            Spacer()
+                            if !viewModel.promotions.isEmpty {
                                 NavigationLink(destination: PromotionsListView(promotions: viewModel.promotions)) {
                                     HStack(spacing: 4) {
                                         Text("See All")
@@ -205,8 +225,11 @@ struct HomeView: View {
                                     .foregroundColor(.brandOrange)
                                 }
                             }
-                            .padding(.horizontal)
-                            
+                        }
+                        .padding(.horizontal)
+                        
+                        if !viewModel.promotions.isEmpty {
+                            // Con datos reales
                             TabView(selection: $currentPromoIndex) {
                                 ForEach(Array(viewModel.promotions.enumerated()), id: \.element.id) { index, promotion in
                                     PromotionCard(promotion: promotion)
@@ -217,7 +240,6 @@ struct HomeView: View {
                             .frame(height: 180)
                             .tabViewStyle(.page(indexDisplayMode: .never))
                             
-                            // Custom Page Indicators
                             HStack(spacing: 8) {
                                 ForEach(0..<viewModel.promotions.count, id: \.self) { index in
                                     Circle()
@@ -225,29 +247,32 @@ struct HomeView: View {
                                         .frame(width: 8, height: 8)
                                         .scaleEffect(currentPromoIndex == index ? 1.2 : 1.0)
                                         .animation(.spring(response: 0.3), value: currentPromoIndex)
-                                        .onTapGesture {
-                                            withAnimation {
-                                                currentPromoIndex = index
-                                            }
-                                        }
                                 }
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.top, 5)
+                        } else {
+                            // Placeholder cards
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 15) {
+                                    ForEach(0..<3) { _ in
+                                        PlaceholderPromotionCard(isLoading: viewModel.isLoading)
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
                         }
                     }
                     
-                    // MARK: - Services Section
-                    if !viewModel.services.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Image(systemName: "scissors")
-                                    .foregroundColor(.brandOrange)
-                                    .imageScale(.medium)
-                                Text("Our Services")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                Spacer()
+                    // MARK: - Services Section (SIEMPRE VISIBLE)
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "scissors")
+                                .foregroundColor(.brandOrange)
+                            Text("Our Services")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                            Spacer()
+                            if !viewModel.services.isEmpty {
                                 NavigationLink(destination: ServicesListView(services: viewModel.services)) {
                                     HStack(spacing: 4) {
                                         Text("See All")
@@ -258,33 +283,40 @@ struct HomeView: View {
                                     .foregroundColor(.brandOrange)
                                 }
                             }
-                            .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 15) {
+                        }
+                        .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) {
+                                if !viewModel.services.isEmpty {
+                                    // Con datos reales
                                     ForEach(viewModel.services.prefix(6)) { service in
                                         NavigationLink(destination: ServiceDetailView(service: service)) {
                                             ServiceCard(service: service)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                     }
+                                } else {
+                                    // Placeholder cards
+                                    ForEach(0..<4) { _ in
+                                        PlaceholderServiceCard(isLoading: viewModel.isLoading)
+                                    }
                                 }
-                                .padding(.horizontal)
                             }
+                            .padding(.horizontal)
                         }
                     }
                     
-                    // MARK: - Top Rated Barbers
-                    if !viewModel.featuredBarbers.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Image(systemName: "star.fill")
-                                    .foregroundColor(.brandOrange)
-                                    .imageScale(.medium)
-                                Text("Top Rated Barbers")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                Spacer()
+                    // MARK: - Barbers Section (SIEMPRE VISIBLE)
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.brandOrange)
+                            Text("Top Rated Barbers")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                            Spacer()
+                            if !viewModel.featuredBarbers.isEmpty {
                                 NavigationLink(destination: BarbersListView(barbers: viewModel.featuredBarbers)) {
                                     HStack(spacing: 4) {
                                         Text("See All")
@@ -295,19 +327,27 @@ struct HomeView: View {
                                     .foregroundColor(.brandOrange)
                                 }
                             }
-                            .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 15) {
+                        }
+                        .padding(.horizontal)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) {
+                                if !viewModel.featuredBarbers.isEmpty {
+                                    // Con datos reales
                                     ForEach(viewModel.featuredBarbers.prefix(6)) { barber in
                                         NavigationLink(destination: BarberDetailView(barber: barber)) {
                                             BarberCard(barber: barber)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                     }
+                                } else {
+                                    // Placeholder cards
+                                    ForEach(0..<4) { _ in
+                                        PlaceholderBarberCard(isLoading: viewModel.isLoading)
+                                    }
                                 }
-                                .padding(.horizontal)
                             }
+                            .padding(.horizontal)
                         }
                     }
                     
@@ -319,52 +359,156 @@ struct HomeView: View {
                 await viewModel.loadHomeData()
             }
             
-            // MARK: - Loading Overlay
-            if viewModel.isLoading {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                
+            // MARK: - Error Overlay (solo si hay error)
+            if let error = viewModel.errorMessage, !viewModel.isLoading {
                 VStack(spacing: 20) {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .brandOrange))
-                        .scaleEffect(1.5)
+                    Spacer()
                     
-                    Text("Loading amazing services...")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                        Text(error)
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                        
+                        Button("Retry") {
+                            Task {
+                                await viewModel.loadHomeData()
+                            }
+                        }
+                        .font(.caption)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.brandOrange)
                         .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .padding()
+                    .background(Color.black.opacity(0.8))
+                    .cornerRadius(12)
+                    .padding()
                 }
-                .padding(30)
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(.systemBackground))
-                        .shadow(color: Color.black.opacity(0.2), radius: 10)
-                )
-                .transition(.scale.combined(with: .opacity))
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut, value: viewModel.errorMessage)
             }
         }
-        .animation(.easeInOut, value: viewModel.isLoading)
-        .animation(.easeInOut, value: viewModel.selectedBranch)
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            if viewModel.branches.isEmpty {
+            if viewModel.branches.isEmpty && !viewModel.isLoading {
                 await viewModel.loadHomeData()
             }
         }
-        .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
-            Button("OK", role: .cancel) {
-                viewModel.errorMessage = nil
-            }
-            Button("Retry") {
-                Task {
-                    await viewModel.loadHomeData()
+    }
+}
+
+// MARK: - Placeholder Components
+
+struct PlaceholderPromotionCard: View {
+    let isLoading: Bool
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(.systemGray6))
+                .frame(width: 280, height: 160)
+            
+            VStack(spacing: 12) {
+                Image(systemName: "photo")
+                    .font(.system(size: 40))
+                    .foregroundColor(.gray)
+                
+                if isLoading {
+                    ProgressView()
+                        .tint(.brandOrange)
+                } else {
+                    Text("No promotions")
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
             }
-        } message: {
-            Text(viewModel.errorMessage ?? "An unexpected error occurred")
         }
+    }
+}
+
+struct PlaceholderServiceCard: View {
+    let isLoading: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemGray6))
+                .frame(width: 160, height: 120)
+                .overlay(
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                                .tint(.brandOrange)
+                        } else {
+                            Image(systemName: "scissors")
+                                .font(.system(size: 30))
+                                .foregroundColor(.gray)
+                        }
+                    }
+                )
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(isLoading ? "Loading..." : "No services")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+                
+                HStack {
+                    Text("--")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    Spacer()
+                    Text("-- min")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.horizontal, 4)
+        }
+        .frame(width: 160)
+    }
+}
+
+struct PlaceholderBarberCard: View {
+    let isLoading: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemGray6))
+                .frame(width: 100, height: 100)
+                .overlay(
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                                .tint(.brandOrange)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.gray)
+                        }
+                    }
+                )
+            
+            Text(isLoading ? "Loading..." : "No barbers")
+                .font(.headline)
+                .foregroundColor(.gray)
+                .lineLimit(1)
+            
+            HStack(spacing: 4) {
+                Image(systemName: "star.fill")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                Text("--")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+        }
+        .frame(width: 140)
     }
 }
 
