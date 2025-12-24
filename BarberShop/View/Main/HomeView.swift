@@ -38,18 +38,23 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let latestLocation = locations.first else { return }
-        userLocation = latestLocation.coordinate
+        Task{ @MainActor in
+            self.userLocation = latestLocation.coordinate
+        }
         manager.stopUpdatingLocation()
         
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(latestLocation) { [weak self] placemarks, error in
             guard let self = self else { return }
-            if let city = placemarks?.first?.locality {
-                self.cityName = city
-            } else if let country = placemarks?.first?.country {
-                self.cityName = country
-            } else {
-                self.cityName = "Current Location"
+            
+            Task{ @MainActor in
+                if let city = placemarks?.first?.locality {
+                    self.cityName = city
+                } else if let country = placemarks?.first?.country {
+                    self.cityName = country
+                } else {
+                    self.cityName = "Current Location"
+                }
             }
         }
     }
