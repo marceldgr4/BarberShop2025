@@ -1,3 +1,10 @@
+//
+//  HomeViewModel.swift
+//  BarberShop
+//
+//  Created by Marcel DiazGranados Robayo
+//
+
 import Foundation
 import SwiftUI
 import MapKit
@@ -24,31 +31,65 @@ class HomeViewModel: ObservableObject {
         errorMessage = nil
         
         do {
+            // ✅ Cargar datos en paralelo
             async let branchesTask = supabase.fetchBranches()
             async let servicesTask = supabase.fetchServices()
             async let promotionsTask = supabase.fetchActivePromotions()
             async let barbersTask = supabase.fetchBarbers()
             
+            // ✅ Esperar todos los resultados
             branches = try await branchesTask
             services = try await servicesTask
             promotions = try await promotionsTask
             featuredBarbers = try await barbersTask
             
-            // Center map on first branch
-            if let firstBranch = branches.first {
+            // ✅ Centrar mapa en la primera sucursal válida
+            if let firstBranch = branches.first,
+               firstBranch.latitude.isFinite,
+               firstBranch.longitude.isFinite {
                 mapRegion.center = CLLocationCoordinate2D(
                     latitude: firstBranch.latitude,
                     longitude: firstBranch.longitude
                 )
             }
+            
+            print("✅ HomeViewModel: Data loaded successfully")
+            print("   Branches: \(branches.count)")
+            print("   Services: \(services.count)")
+            print("   Promotions: \(promotions.count)")
+            print("   Barbers: \(featuredBarbers.count)")
+            
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = "Failed to load data: \(error.localizedDescription)"
+            print("❌ HomeViewModel Error: \(error)")
+            
+            // ✅ Imprimir detalles del error para debugging
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .dataCorrupted(let context):
+                    print("   Data corrupted: \(context)")
+                case .keyNotFound(let key, let context):
+                    print("   Key '\(key)' not found: \(context.debugDescription)")
+                case .typeMismatch(let type, let context):
+                    print("   Type '\(type)' mismatch: \(context.debugDescription)")
+                case .valueNotFound(let type, let context):
+                    print("   Value '\(type)' not found: \(context.debugDescription)")
+                @unknown default:
+                    print("   Unknown decoding error")
+                }
+            }
         }
         
         isLoading = false
     }
     
     func selectBranch(_ branch: Branch) {
+        // ✅ Validar coordenadas antes de actualizar
+        guard branch.latitude.isFinite && branch.longitude.isFinite else {
+            print("⚠️ Invalid coordinates for branch: \(branch.name)")
+            return
+        }
+        
         selectedBranch = branch
         mapRegion.center = CLLocationCoordinate2D(
             latitude: branch.latitude,
