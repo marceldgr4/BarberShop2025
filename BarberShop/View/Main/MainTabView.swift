@@ -22,6 +22,12 @@ struct MainTabView: View {
             }
             
             NavigationStack {
+                MapView()
+            }
+            .tabItem {
+                Label("Map", systemImage: "map.fill")
+            }
+            NavigationStack {
                 AppointmentsView()
                     .environmentObject(appointmentViewModel)
             }

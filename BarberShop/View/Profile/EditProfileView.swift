@@ -1,41 +1,226 @@
-//
-//  EditProfileView.swift
-//  BarberShop
-//
-//  Created by Marcel DiazGranados Robayo on 21/12/25.
-//
-
 import SwiftUI
 
 struct EditProfileView: View {
     let user: User?
+    @StateObject private var viewModel = EditProfileViewModel()
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         Form {
-            Section("Personal Information"){
-                if let user = user{
-                    Text("Name: \(user.fullName)")
-                    if let email = user.email{
-                        Text("email:\(email)")
+            // MARK: - Profile Photo Section
+            Section {
+                HStack {
+                    Spacer()
+                    VStack(spacing: 12) {
+                        AsyncImage(url: URL(string: user?.photoUrl ?? "")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .foregroundColor(.orange)
+                        }
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        
+                        Button(action: {
+                            // TODO: Implementar cambio de foto
+                        }) {
+                            Text("Change Photo")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                        }
                     }
-                    if let phone = user.phone{
-                        Text("Phone: \(phone)")
+                    Spacer()
+                }
+            }
+            
+            // MARK: - Personal Information
+            Section("Personal Information") {
+                // Full Name
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Full Name", systemImage: "person.fill")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    TextField("Enter your name", text: $viewModel.fullName)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled()
+                        .textFieldStyle(.roundedBorder)
+                }
+                
+                // Phone
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Phone Number", systemImage: "phone.fill")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    TextField("+57 3xx xxx xxxx", text: $viewModel.phone)
+                        .keyboardType(.phonePad)
+                        .textFieldStyle(.roundedBorder)
+                }
+                
+                // Email (Solo lectura)
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Email", systemImage: "envelope.fill")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
+                    
+                    Text(viewModel.email)
+                        .foregroundColor(.gray)
+                        .font(.body)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                }
+                .listRowBackground(Color.clear)
+            }
+            
+            // MARK: - Success Message
+            if viewModel.showSuccess {
+                Section {
+                    HStack(spacing: 10) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        
+                        Text("Profile updated successfully!")
+                            .font(.subheadline)
+                            .foregroundColor(.green)
+                        
+                        Spacer()
                     }
-                }else{
-                    Text("Loading")
+                }
+                .listRowBackground(Color.green.opacity(0.1))
+            }
+            
+            // MARK: - Error Message
+            if let errorMessage = viewModel.errorMessage {
+                Section {
+                    HStack(spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                        
+                        Spacer()
+                    }
+                }
+                .listRowBackground(Color.red.opacity(0.1))
+            }
+            
+            // MARK: - Save Button
+            Section {
+                Button(action: {
+                    Task {
+                        await viewModel.saveChanges()
+                        if viewModel.showSuccess {
+                            // Esperar 1.5 segundos y cerrar
+                            try? await Task.sleep(nanoseconds: 1_500_000_000)
+                            dismiss()
+                        }
+                    }
+                }) {
+                    HStack {
+                        Spacer()
+                        
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            Text("Saving...")
+                                .fontWeight(.semibold)
+                        } else {
+                            Text("Save Changes")
+                                .fontWeight(.bold)
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                        
+                        Spacer()
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(
+                        // ✅ FIX: Ambos lados del ternario son del mismo tipo
+                        Group {
+                            if viewModel.hasChanges && viewModel.isValid {
+                                LinearGradient(
+                                    colors: [Color.orange, Color.red],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            } else {
+                                LinearGradient(
+                                    colors: [Color.gray, Color.gray],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            }
+                        }
+                    )
+                    .cornerRadius(12)
+                }
+                .disabled(!viewModel.hasChanges || !viewModel.isValid || viewModel.isLoading)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+            
+            // MARK: - Discard Changes Button
+            if viewModel.hasChanges {
+                Section {
+                    Button(action: {
+                        viewModel.discardChanges()
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Discard Changes")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                    }
                 }
             }
         }
         .navigationTitle("Edit Profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Cancel") {
+                    dismiss()
+                }
+                .foregroundColor(.orange)
+            }
+        }
+        .onAppear {
+            if let user = user {
+                viewModel.loadUser(user)
+            }
+        }
     }
 }
 
+
+
+// MARK: - Preview
 #Preview {
-    EditProfileView(user: User(id: UUID(),
-                               fullName: "marcel",
-                               phone: "42423",
-                               email: "prueba@gmail.com",
-                               photoUrl: nil,
-                               isActive: true,
-                               createdAt: Date(),
-                               updatedAt: Date()))
+    NavigationStack {
+        EditProfileView(user: User(
+            id: UUID(),
+            fullName: "Marcel Diaz",
+            phone: "+57 300 123 4567",
+            email: "marcel@example.com",
+            photoUrl: nil,
+                        isActive: true,
+            createdAt: Date(),
+            updatedAt: Date(),
+            rolId: UUID(),
+        ))
+    }
 }

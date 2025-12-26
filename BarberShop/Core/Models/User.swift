@@ -16,6 +16,7 @@ struct User: Identifiable, Codable {
     let isActive: Bool
     let createdAt: Date
     let updatedAt: Date
+    let rolId: UUID?
         
     enum CodingKeys: String, CodingKey{
         case id,email, phone
@@ -24,5 +25,6 @@ struct User: Identifiable, Codable {
         case photoUrl = "photo_url"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
+        case rolId = "rol_id"
     }
 }
