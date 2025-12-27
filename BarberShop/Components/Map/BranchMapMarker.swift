@@ -5,12 +5,7 @@
 //  Created by Marcel DiazGranados Robayo on 15/12/25.
 //
 
-//
-//  BranchMapMarker.swift
-//  BarberShop
-//
-//  Created by Marcel DiazGranados Robayo on 15/12/25.
-//
+
 
 import SwiftUI
 

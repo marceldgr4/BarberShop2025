@@ -17,10 +17,10 @@ struct AppointmentRow: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-            } placeholder: {  // ✅ FIX: Espacio antes de placeholder
+            } placeholder: {  
                 Image(systemName: "person.circle.fill")
                     .resizable()
-                    .foregroundColor(.gray)
+                    .foregroundColor(.brandOrange)
             }
             .frame(width: 50, height: 50)
             .clipShape(Circle())
