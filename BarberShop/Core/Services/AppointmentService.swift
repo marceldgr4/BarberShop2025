@@ -11,8 +11,11 @@ import Supabase
 final class AppointmentService{
     private let client: SupabaseClient
     
-    init(client: SupabaseClient) {
+    init(client: SupabaseClient = SupabaseManager.shared.client) {
         self.client = client
+    }
+    convenience init(){
+        self.init(client: SupabaseManager.shared.client)
     }
     /// Crea una nueva cita
     func createAppointment(

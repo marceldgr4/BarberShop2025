@@ -15,6 +15,7 @@ class EditProfileViewModel: ObservableObject {
     
     private var originalUser: User?
     private let supabase = SupabaseManager.shared
+    private let profileUserService = AuthenticationService()
     
     // ✅ Detecta si hay cambios
     var hasChanges: Bool {
@@ -42,7 +43,7 @@ class EditProfileViewModel: ObservableObject {
             return
         }
         
-        // ✅ Validación
+        //  Validación
         guard isValid else {
             errorMessage = "Name cannot be empty"
             return
@@ -55,14 +56,14 @@ class EditProfileViewModel: ObservableObject {
         do {
             let trimmedPhone = phone.trimmingCharacters(in: .whitespaces)
             
-            try await supabase.updateUser(
+            try await profileUserService.updateUser(
                 userId: userId,
                 fullName: fullName.trimmingCharacters(in: .whitespaces),
                 phone: trimmedPhone.isEmpty ? nil : trimmedPhone
             )
             
             showSuccess = true
-            print("✅ Profile updated successfully")
+            print("<-OK-> Profile updated successfully")
             
             // Actualizar el usuario original con los nuevos valores
             if var updatedUser = originalUser {
@@ -82,7 +83,7 @@ class EditProfileViewModel: ObservableObject {
             }
             
         } catch {
-            print("❌ Error saving profile: \(error)")
+            print(" <-X-> Error saving profile: \(error)")
             errorMessage = error.localizedDescription
             showSuccess = false
         }

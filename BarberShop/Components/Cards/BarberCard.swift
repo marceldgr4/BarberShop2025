@@ -1,9 +1,3 @@
-//
-//  BarberCard.swift
-//  BarberShop
-//
-//  Created by Marcel DiazGranados Robayo on 15/12/25.
-//
 
 import SwiftUI
 
@@ -19,15 +13,16 @@ struct BarberCard: View {
                 
             } placeholder: {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color.orange.opacity(0.3))
                     .overlay(
                         Image(systemName: "person.fill")
-                            .foregroundColor(.gray)
+                            
+                            .foregroundColor(.brandOrange)
                             
                     )
             }
             .frame(width: 100,height: 100)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .clipShape(RoundedRectangle(cornerRadius: 30))
             
             Text(barber.name)
                 .font(.headline)
@@ -41,7 +36,7 @@ struct BarberCard: View {
                         .font(.caption)
                     Text("(\(totalReviews))")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.blue)
                 }
             }
         }

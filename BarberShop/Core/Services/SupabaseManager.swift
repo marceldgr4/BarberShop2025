@@ -6,7 +6,7 @@ final class SupabaseManager {
     let client: SupabaseClient
     
     // MARK: - Custom Date Decoder
-    private let decoder: JSONDecoder = {
+    internal let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .custom { decoder in
             let container = try decoder.singleValueContainer()

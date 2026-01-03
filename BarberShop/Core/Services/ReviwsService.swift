@@ -12,7 +12,7 @@ final class ReviwsService{
     private let client: SupabaseClient
     private let decoder: JSONDecoder
     
-    init(client: SupabaseClient, decoder: JSONDecoder) {
+    init(client: SupabaseClient = SupabaseManager.shared.client, decoder: JSONDecoder = SupabaseManager.shared.decoder ) {
         self.client = client
         self.decoder = decoder
     }
