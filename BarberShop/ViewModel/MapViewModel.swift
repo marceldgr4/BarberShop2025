@@ -17,7 +17,8 @@ class MapViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let supabase = SupabaseManager.shared
+    //private let supabase = SupabaseManager.shared
+    private let branchService = BranchService()
     private var allBranches: [Branch] = []
     
     init() {
@@ -43,7 +44,7 @@ class MapViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            allBranches = try await supabase.fetchBranches()
+            allBranches = try await branchService.fetchBranches()
             branches = allBranches
             
             // Solo centrar si hay sucursales válidas

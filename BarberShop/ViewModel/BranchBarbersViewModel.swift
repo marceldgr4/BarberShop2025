@@ -13,14 +13,15 @@ class BranchBarbersViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let supabase = SupabaseManager.shared
-    
+    //private let supabase = SupabaseManager.shared
+    private let branchService = BranchService()
+    private let barberService = BarberService()
     func loadBarbers(for branchId: UUID) async {
         isLoading = true
         errorMessage = nil
         
         do {
-            barbers = try await supabase.fetchBarbers(branchId: branchId)
+            barbers = try await barberService.fetchBarbers(branchId: branchId)
         } catch {
             errorMessage = error.localizedDescription
         }

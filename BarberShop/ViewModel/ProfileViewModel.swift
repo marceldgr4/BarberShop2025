@@ -19,15 +19,19 @@ class ProfileViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isSaving = false
     
-    private let supabase = SupabaseManager.shared
+   // private let supabase = SupabaseManager.shared
+    private let profile = AuthenticationService()
+    private let appointmentService = AppointmentService()
+    private let favoriteService = FavoriteService()
+    
     
     func loadProfile() async {
         isLoading = true
         
         do{
-            async let userTask = supabase.getCurrentUser()
-            async let appointmentsTask = supabase.fecthUserAppointments()
-            async let favoritesTask = supabase.fetchFavoriteBarbers()
+            async let userTask = profile.getCurrentUser()
+            async let appointmentsTask = appointmentService.fecthUserAppointments()
+            async let favoritesTask = favoriteService.fetchFavoriteBarbers()
             
             user = try await userTask
             appointments = try await appointmentsTask
@@ -39,7 +43,7 @@ class ProfileViewModel: ObservableObject {
     }
     func toggleFavorite(barberId: UUID) async {
         do{
-            try await supabase.toggleFavoriteBarber(barberId: barberId)
+            try await favoriteService.toggleFavoriteBarber(barberId: barberId)
             await loadProfile()
         }catch{
             errorMessage = error.localizedDescription

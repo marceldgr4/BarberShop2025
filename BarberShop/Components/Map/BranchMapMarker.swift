@@ -4,9 +4,6 @@
 //
 //  Created by Marcel DiazGranados Robayo on 15/12/25.
 //
-
-
-
 import SwiftUI
 
 struct BranchMapMarker: View {

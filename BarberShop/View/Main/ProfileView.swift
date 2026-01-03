@@ -125,12 +125,12 @@ struct ProfileView: View {
         }
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)
-        .task(id: refreshID) { // ✅ Recarga cuando cambia refreshID
+        .task(id: refreshID) { //  Recarga cuando cambia refreshID
             if viewModel.user == nil {
                 await viewModel.loadProfile()
             }
         }
-        .onAppear { // ✅ Recarga al aparecer (después de editar)
+        .onAppear { //  Recarga al aparecer (después de editar)
             Task {
                 await viewModel.loadProfile()
             }

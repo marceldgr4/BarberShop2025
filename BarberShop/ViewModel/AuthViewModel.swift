@@ -12,12 +12,13 @@ import Combine
 
 @MainActor
 class AuthViewModel: ObservableObject {
+    private let authenticationService = AuthenticationService()
     @Published var currentUser: User?
     @Published var isAuthenticated = false
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let supabase = SupabaseManager.shared
+    //private let supabase = SupabaseManager.shared
     
     init(){
         Task{
@@ -27,7 +28,7 @@ class AuthViewModel: ObservableObject {
     
     func checkAuthStatus() async{
         do{
-            currentUser = try await supabase.getCurrentUser()
+            currentUser = try await authenticationService.getCurrentUser()
             isAuthenticated = currentUser != nil
         } catch{
             isAuthenticated = false
@@ -44,7 +45,7 @@ class AuthViewModel: ObservableObject {
         errorMessage = nil
         
         do{
-            currentUser = try await supabase.signUp(email: email, password: password, fullName: fullName, phone: phone)
+            currentUser = try await authenticationService.signUp(email: email, password: password, fullName: fullName, phone: phone)
             isAuthenticated = true
         }catch{
             errorMessage = error.localizedDescription
@@ -60,7 +61,7 @@ class AuthViewModel: ObservableObject {
         errorMessage = nil
         
         do{
-            try await supabase.signIn(email: email, password: password)
+            try await authenticationService.signIn(email: email, password: password)
             await checkAuthStatus()
         }catch{
             errorMessage = error.localizedDescription
@@ -70,7 +71,7 @@ class AuthViewModel: ObservableObject {
     
     func signOut() async{
         do{
-            try await supabase.signOut()
+            try await authenticationService.signOut()
             currentUser = nil
             isAuthenticated = false
             
@@ -84,7 +85,7 @@ class AuthViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            try await supabase.resetPassword(email: email)
+            try await authenticationService.resetPassword(email: email)
         }catch {
             errorMessage = error.localizedDescription
         }

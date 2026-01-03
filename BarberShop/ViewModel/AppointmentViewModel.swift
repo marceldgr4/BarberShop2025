@@ -8,8 +8,11 @@
 import Foundation
 import Combine
 
+
 @MainActor
 class AppointmentViewModel: ObservableObject {
+    private let appointmentService = AppointmentService()
+    
     @Published var appointments : [AppointmentDetail] = [ ]
     @Published var selectedBranch: Branch?
     @Published var selectedBarber: BarberWithRating?
@@ -21,13 +24,13 @@ class AppointmentViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var showSuccess = false
     
-    private let supabase = SupabaseManager.shared
+    //private let supabase = SupabaseManager.shared
     
     func loadAppointments() async{
         isLoading = true
     
         do{
-            appointments = try await supabase.fecthUserAppointments()
+            appointments = try await appointmentService.fecthUserAppointments()
             
         }catch{
             errorMessage = error.localizedDescription
@@ -48,7 +51,7 @@ class AppointmentViewModel: ObservableObject {
         let dateString = formatter.string(from: selectedDate)
         
         do {
-            _ = try await supabase.createAppointment(branchId: branch.id,
+            _ = try await appointmentService.createAppointment(branchId: branch.id,
                                                      barberId: barber.id,
                                                      serviceId: service.id,
                                                      date: dateString,

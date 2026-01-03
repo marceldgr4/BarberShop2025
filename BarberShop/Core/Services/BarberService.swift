@@ -11,7 +11,7 @@ import Supabase
 final class BarberService{
     private let client: SupabaseClient
     
-    init(client: SupabaseClient) {
+    init(client: SupabaseClient = SupabaseManager.shared.client) {
         self.client = client
     }
     /// Obtiene barberos con su calificación

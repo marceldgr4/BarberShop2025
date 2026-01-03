@@ -12,6 +12,13 @@ import Combine
 
 @MainActor
 class HomeViewModel: ObservableObject {
+    // MARK: - Services
+    private let branchService = BranchService()
+    private let serviceService = ServiceService()
+    private let promotionService = PromotionService()
+    private let barberService = BarberService()
+    
+    // MARK: - Published Properties
     @Published var branches: [Branch] = []
     @Published var services: [Service] = []
     @Published var promotions: [Promotion] = []
@@ -24,26 +31,25 @@ class HomeViewModel: ObservableObject {
         span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     )
     
-    private let supabase = SupabaseManager.shared
-    
+    // MARK: - Load Home Data
     func loadHomeData() async {
         isLoading = true
         errorMessage = nil
         
         do {
-            // ✅ Cargar datos en paralelo
-            async let branchesTask = supabase.fetchBranches()
-            async let servicesTask = supabase.fetchServices()
-            async let promotionsTask = supabase.fetchActivePromotions()
-            async let barbersTask = supabase.fetchBarbers()
+            // Cargar datos en paralelo
+            async let branchesTask = branchService.fetchBranches()
+            async let servicesTask = serviceService.fetchServices()
+            async let promotionsTask = promotionService.fetchActivePromotions()
+            async let barbersTask = barberService.fetchBarbers()
             
-            // ✅ Esperar todos los resultados
+            // Esperar todos los resultados
             branches = try await branchesTask
             services = try await servicesTask
             promotions = try await promotionsTask
             featuredBarbers = try await barbersTask
             
-            // ✅ Centrar mapa en la primera sucursal válida
+            // Centrar mapa en la primera sucursal válida
             if let firstBranch = branches.first,
                firstBranch.latitude.isFinite,
                firstBranch.longitude.isFinite {
@@ -53,17 +59,17 @@ class HomeViewModel: ObservableObject {
                 )
             }
             
-            print("✅ HomeViewModel: Data loaded successfully")
-            print("   Branches: \(branches.count)")
-            print("   Services: \(services.count)")
-            print("   Promotions: \(promotions.count)")
-            print("   Barbers: \(featuredBarbers.count)")
+            print("<-OK-> HomeViewModel: Data loaded successfully")
+            print("<-OK-> Branches: \(branches.count)")
+            print("<-OK-> Services: \(services.count)")
+            print("<-OK-> Promotions: \(promotions.count)")
+            print("<-OK-> Barbers: \(featuredBarbers.count)")
             
         } catch {
             errorMessage = "Failed to load data: \(error.localizedDescription)"
-            print("❌ HomeViewModel Error: \(error)")
+            print("<-X-> HomeViewModel Error: \(error)")
             
-            // ✅ Imprimir detalles del error para debugging
+            // Imprimir detalles del error para debugging
             if let decodingError = error as? DecodingError {
                 switch decodingError {
                 case .dataCorrupted(let context):
@@ -83,8 +89,9 @@ class HomeViewModel: ObservableObject {
         isLoading = false
     }
     
+    // MARK: - Select Branch
     func selectBranch(_ branch: Branch) {
-        // ✅ Validar coordenadas antes de actualizar
+        // Validar coordenadas antes de actualizar
         guard branch.latitude.isFinite && branch.longitude.isFinite else {
             print("⚠️ Invalid coordinates for branch: \(branch.name)")
             return
