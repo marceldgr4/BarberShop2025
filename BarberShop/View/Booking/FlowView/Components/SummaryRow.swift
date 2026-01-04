@@ -33,6 +33,5 @@ struct SummaryRow: View {
 }
 
 
-#Preview {
-    SummaryRow()
-}
+
+

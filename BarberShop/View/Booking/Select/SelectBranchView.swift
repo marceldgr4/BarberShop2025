@@ -59,8 +59,10 @@ struct SelectBranchView: View {
                 ScrollView{
                     LazyVStack(spacing: 15){
                         ForEach(filteredBranches) { branch in
-                            branchSelectionCard( branch: branch,
-                                                 isSelected: viewModel.selectedBranch?.id == branch.id ) {
+                            BranchSelectionCard(
+                                viewModel: viewModel,
+                                branch: branch,
+                                isSelected: viewModel.selectedBranch?.id == branch.id ) {
                                 withAnimation(.spring(response: 0.3)){
                                     viewModel.selectedBranch = branch
                                 }
@@ -73,5 +75,8 @@ struct SelectBranchView: View {
             }
         }
     }
+}
+#Preview {
+    SelectBranchView(viewModel: BookingViewModel())
 }
 

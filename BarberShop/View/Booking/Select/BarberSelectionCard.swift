@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BarberSelectedCard: View {
+struct BarberSelectionCard: View {
     let barber: BarberWithRating
     let isSelected:Bool
     let onTap: () -> Void
@@ -45,6 +45,7 @@ struct BarberSelectedCard: View {
                                 .foregroundColor(.gray)
                         }
                     }
+                }
                     Spacer()
                     Image(systemName: isSelected ? "checkmark.circle.fill": "circle")
                         .foregroundColor(isSelected ? .green: .gray)
@@ -64,4 +65,38 @@ struct BarberSelectedCard: View {
         }
     }
     
-}
+    #Preview {
+        VStack {
+            BarberSelectionCard(
+                barber: BarberWithRating(
+                    id: UUID(),
+                    branchId: UUID(),
+                    specialtyId: UUID(),
+                    name: "Carlos Martínez",
+                    photoUrl: nil,
+                    isActive: true,
+                    rating: 4.8,
+                    totalReviews: 156
+                ),
+                isSelected: true,
+                onTap: {}
+            )
+            .padding()
+            
+            BarberSelectionCard(
+                barber: BarberWithRating(
+                    id: UUID(),
+                    branchId: UUID(),
+                    specialtyId: UUID(),
+                    name: "Luis Rodríguez",
+                    photoUrl: nil,
+                    isActive: true,
+                    rating: 4.6,
+                    totalReviews: 98
+                ),
+                isSelected: false,
+                onTap: {}
+            )
+            .padding()
+        }
+    }

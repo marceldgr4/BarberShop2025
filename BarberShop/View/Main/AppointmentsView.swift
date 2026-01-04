@@ -71,8 +71,7 @@ struct AppointmentsView: View {
             }
         }
         .sheet(isPresented: $showBooking){
-            Text("Book Appointment View - Coming Soon")
-                .font(.title)
+            BookingFlowView()
         }
         .task {
             await viewModel.loadAppointments()

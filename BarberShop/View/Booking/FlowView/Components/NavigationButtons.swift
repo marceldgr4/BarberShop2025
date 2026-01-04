@@ -14,7 +14,7 @@ struct NavigationButtons: View {
             if viewModel.currentStep != .selectBranch{
                 Button{
                     withAnimation{
-                        viewModel.previousStep()
+                        viewModel.previosStep()
                     }
                 } label: {
                     HStack{
@@ -44,7 +44,11 @@ struct NavigationButtons: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(viewModel.canProceedToNextStep ? Color.brandOrange: LinearGradient(colors: [.gray, .gray], startPoint: .leading, endPoint: .trailing)
+                .background(viewModel.canProceedToNextStep ?
+                            Color.brandGradient:
+                                LinearGradient(colors: [.gray, .gray],
+                                               startPoint: .leading,
+                                               endPoint: .trailing)
                 )
                 .cornerRadius(12)
                 .shadow(color: viewModel.canProceedToNextStep ? Color.brandOrange.opacity(0.3): .clear, radius: 8, y: 4)
@@ -59,5 +63,5 @@ struct NavigationButtons: View {
 }
 
 #Preview {
-    NavigationButtons()
+    NavigationButtons(viewModel: BookingViewModel())
 }
