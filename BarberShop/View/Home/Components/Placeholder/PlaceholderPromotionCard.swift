@@ -8,11 +8,32 @@
 import SwiftUI
 
 struct PlaceholderPromotionCard: View {
+    let isLoading: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(.systemGray6))
+                .frame(width: 280, height: 160)
+            
+            VStack(spacing: 12) {
+                Image(systemName: "photo")
+                    .font(.system(size: 40))
+                    .foregroundColor(.gray)
+                
+                if isLoading {
+                    ProgressView()
+                        .tint(.brandOrange)
+                } else {
+                    Text("No promotions")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    PlaceholderPromotionCard()
+    PlaceholderPromotionCard(isLoading: true)
 }

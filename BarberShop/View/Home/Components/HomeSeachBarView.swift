@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct HomeSeachBarView: View {
+    @Binding var text: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(spacing:12){
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            TextField("Seach services, Barbers...", text:$text)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+            
+            if !text.isEmpty{
+                Button(action:{
+                    text = ""
+                }){
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(15)
+        .padding(.horizontal)
     }
 }
 
 #Preview {
-    HomeSeachBarView()
+    HomeSeachBarView(text:.constant(""))
 }
