@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BranchSelectedCard: View {
+struct BranchSelectionCard: View {
     @ObservedObject var viewModel: BookingViewModel
     let branch: Branch
     let isSelected: Bool
@@ -82,23 +82,25 @@ struct BranchSelectedCard: View {
 
 
 
-    #Preview {
-        SelectBarberView(viewModel: {
-            let vm = BookingViewModel()
-            vm.selectedBranch = Branch(
-                id: UUID(),
-                name: "Central Barbershop",
-                address: "Calle 72",
-                latitude: 10.9878,
-                longitude: -74.7889,
-                phone: "+57 300 123 4567",
-                email: "central@barbershop.com",
-                isActive: true,
-                imageUrl: nil,
-                createdAt: Date(),
-                updatedAt: Date()
-            )
-            return vm
-        }())
-    }
+#Preview {
+    BranchSelectionCard(
+        viewModel: BookingViewModel(),
+        branch: Branch(
+            id: UUID(),
+            name: "Central Barbershop",
+            address: "Calle 72 #45-67, Barranquilla",
+            latitude: 10.9878,
+            longitude: -74.7889,
+            phone: "+57 300 123 4567",
+            email: "central@barbershop.com",
+            isActive: true,
+            imageUrl: nil,
+            createdAt: Date(),
+            updatedAt: Date()
+        ),
+        isSelected: true,
+        onTap: {}
+    )
+    .padding()
+}
 

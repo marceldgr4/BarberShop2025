@@ -19,14 +19,13 @@ class BookingViewModel: ObservableObject {
     @Published var selectedTime: String?
     @Published var notes = ""
     
-    @Published var branches : [Branch] = []
+    @Published var branches: [Branch] = []
     @Published var barbers: [BarberWithRating] = []
     @Published var services: [Service] = []
     @Published var availableTimeSlots: [String] = []
     
-    
     @Published var isLoading = false
-    @Published var errorMessage :String?
+    @Published var errorMessage: String?
     @Published var showSuccess = false
     @Published var bookingConfirmation: Appointment?
     
@@ -37,25 +36,24 @@ class BookingViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    
-    
-    init(){
+    init() {
         self.branchService = BranchService(
             client: SupabaseManager.shared.client,
             decoder: SupabaseManager.shared.decoder
         )
         self.barberService = BarberService(
+            client: SupabaseManager.shared.client
         )
         self.serviceService = ServiceService(
             client: SupabaseManager.shared.client,
             decoder: SupabaseManager.shared.decoder
         )
+        self.appointmentService = AppointmentService(
+            client: SupabaseManager.shared.client
+        )
         
-        Task{
+        Task {
             await loadBranches()
         }
     }
-
-    
-    
 }

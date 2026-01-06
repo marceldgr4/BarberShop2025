@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProgresBar: View {
+struct ProgressBar: View {
     let currentStep: BookingStep
     var body: some View {
         VStack(spacing:8){
@@ -39,5 +39,5 @@ struct ProgresBar: View {
 }
 
 #Preview {
-    ProgresBar(currentStep: .selectBranch)
+    ProgressBar(currentStep: .selectBranch)
 }

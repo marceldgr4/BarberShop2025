@@ -15,9 +15,34 @@ struct BookingFlowView: View {
         NavigationStack{
             VStack(spacing: 0){
                 
-                BookingProgressBar(currentStep: viewModel.currentStep)
+                ProgressBar(currentStep: viewModel.currentStep)
                     .padding(.horizontal)
                     .padding(.top,10)
+                StepContent(viewModel: viewModel)
+                Spacer()
+                NavigationButtons(viewModel: viewModel)
+            }
+            .navigationTitle("Book Appointment")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading){
+                    Button("Cancel"){
+                        dismiss()
+                    }
+                    .foregroundColor(.brandOrange)
+                }
+            }
+            .overlay{
+                if viewModel.isLoading{
+                    LoadingOverlay()
+                }
+            }
+            .overlay{
+                if viewModel.showSuccess, let appointment = viewModel.bookingConfirmation{
+                    SuccessView(appointment: appointment){
+                        dismiss()
+                    }
+                }
             }
         }
     }

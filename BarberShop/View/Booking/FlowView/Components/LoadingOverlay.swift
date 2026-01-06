@@ -15,7 +15,7 @@ struct LoadingOverlay: View {
                    VStack(spacing: 15) {
                        ProgressView()
                            .scaleEffect(1.5)
-                           .tint(.white)
+                           .tint(.brandOrange)
                        
                        Text("Loading...")
                            .foregroundColor(.white)

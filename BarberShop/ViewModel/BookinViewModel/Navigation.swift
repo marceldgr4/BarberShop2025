@@ -42,7 +42,7 @@ extension BookingViewModel {
         currentStep = .selectBranch
         selectedBranch = nil
         selectedBarber = nil
-        selectedService.removeAll()
+        selectedServices.removeAll()
         selectedDate = Date()
         selectedTime = nil
         notes = ""

@@ -16,15 +16,15 @@ struct StepContent: View {
         case .selectBarber:
             SelectBarberView( viewModel: viewModel)
         case .selectService:
-            SelectService( viewModel: viewModel)
+            SelectServiceView( viewModel: viewModel)
         case .selectDateTime:
-                                selectDateTimeView(viewModel: viewModel)
+            SelectDateTimeView(viewModel: viewModel)
         case .confirmation:
-                                BookingConfirmationView(viewModel: viewModel)
+            BookingConfirmationView(viewModel: viewModel)
         }
     }
 }
 
 #Preview {
-    StepContent(viewModel: <#BookingViewModel#>)
+    StepContent(viewModel: BookingViewModel())
 }
