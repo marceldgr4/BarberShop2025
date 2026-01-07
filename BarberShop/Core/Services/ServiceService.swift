@@ -12,7 +12,7 @@ final class ServiceService{
     private let client: SupabaseClient
     private let decoder: JSONDecoder
     
-    init(client: SupabaseClient = SupabaseManager.shared.client, decoder: JSONDecoder = SupabaseManager.shared.decoder) {
+    init(client: SupabaseClient = SupabaseManagerSecure.shared.client, decoder: JSONDecoder = SupabaseManagerSecure.shared.decoder) {
         self.client = client
         self.decoder = decoder
     }

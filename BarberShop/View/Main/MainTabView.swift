@@ -18,14 +18,14 @@ struct MainTabView: View {
                 ExploreView()
             }
             .tabItem {
-                Label("Explore", systemImage: "map.fill")
+                Label("Explore", systemImage: "list.bullet.below.rectangle")
             }
             
             NavigationStack {
                 MapView()
             }
             .tabItem {
-                Label("Map", systemImage: "map.fill")
+                Label("Map", systemImage: "network")
             }
             NavigationStack {
                 AppointmentsView()

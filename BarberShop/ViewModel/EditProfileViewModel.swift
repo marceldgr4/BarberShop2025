@@ -14,17 +14,16 @@ class EditProfileViewModel: ObservableObject {
     @Published var errorMessage: String?
     
     private var originalUser: User?
-    private let supabase = SupabaseManager.shared
+    private let supabase = SupabaseManagerSecure.shared
     private let profileUserService = AuthenticationService()
     
-    // ✅ Detecta si hay cambios
+    
     var hasChanges: Bool {
         guard let original = originalUser else { return false }
         return fullName.trimmingCharacters(in: .whitespaces) != original.fullName ||
                phone.trimmingCharacters(in: .whitespaces) != (original.phone ?? "")
     }
     
-    // ✅ Valida que los datos sean correctos
     var isValid: Bool {
         !fullName.trimmingCharacters(in: .whitespaces).isEmpty
     }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-extension SupabaseManager{
+extension SupabaseManagerSecure{
     
     // MARK: - Authentication Methods
     

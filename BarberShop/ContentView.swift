@@ -23,7 +23,7 @@ struct ContentView: View {
             }
         }
         .task{
-            for await state in SupabaseManager.shared.client.auth.authStateChanges{
+            for await state in SupabaseManagerSecure.shared.client.auth.authStateChanges{
                 if [.initialSession, .signedIn, .signedOut].contains(state.event){
                     isAuthenticated = state.session != nil
                 }
