@@ -10,6 +10,7 @@ import MapKit
 
 struct HomeHeaderView: View {
     @ObservedObject var locationManager: LocationManager
+    let unreadCount: Int
     var onNotificationTap: ()-> Void
     var body: some View {
         HStack{
@@ -37,12 +38,25 @@ struct HomeHeaderView: View {
                         .background(Color(.systemGray6))
                         .clipShape(Circle())
                     
-                    Circle()
-                        .fill(Color.red)
-                        .frame(width: 8,height: 8)
-                        .offset(x: -2, y: 2)
+                    if unreadCount > 0{
+                        ZStack{
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 8,height: 8)
+                            Text("\(min(unreadCount,99))")
+                                .font(.system(size: 10,weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                                .offset(x: -3, y: 3)
+                                .scaleEffect(unreadCount > 0 ? 1.8 : 1.1)
+                                .animation(Animation.spring(response: 0.3,dampingFraction: 0.6)
+                                    .repeatCount(3, autoreverses: true),
+                                           value: unreadCount)
+                        }
+                    }
                 }
-            }
+            .buttonStyle(PlainButtonStyle())
+            
         }
         .padding(.horizontal)
         .padding(.top, 10)
@@ -50,5 +64,9 @@ struct HomeHeaderView: View {
 }
 
 #Preview {
-    HomeHeaderView(locationManager: LocationManager(), onNotificationTap: {})
+    HomeHeaderView(
+        locationManager: LocationManager(),
+        unreadCount: 1,
+        onNotificationTap: {})
+    .padding()
 }

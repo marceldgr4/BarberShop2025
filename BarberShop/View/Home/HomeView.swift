@@ -4,8 +4,10 @@ import Combine
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var notificationService = NotificationService.shared
     
     @State private var searchText = ""
+    @State private var showNotifications = false
     
     var body: some View {
         ZStack{
@@ -15,7 +17,11 @@ struct HomeView: View {
             ScrollView(showsIndicators: false){
                 VStack(alignment: .leading, spacing: 20){
                     
-                    HomeHeaderView(locationManager: locationManager){
+                    HomeHeaderView(
+                        locationManager: locationManager,
+                        unreadCount: notificationService.unreadCount
+                    ){
+                        showNotifications = true
                         print("Notification tapped")
                     }
                     HomeSeachBarView(text: $searchText)
@@ -44,6 +50,9 @@ struct HomeView: View {
         }
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showNotifications){
+            NotificationView()
+        }
         .task {
             if viewModel.branches.isEmpty && !viewModel.isLoading{
                 await viewModel.loadHomeData()

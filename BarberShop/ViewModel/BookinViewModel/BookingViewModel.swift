@@ -38,18 +38,18 @@ class BookingViewModel: ObservableObject {
     
     init() {
         self.branchService = BranchService(
-            client: SupabaseManager.shared.client,
-            decoder: SupabaseManager.shared.decoder
+            client: SupabaseManagerSecure.shared.client,
+            decoder: SupabaseManagerSecure.shared.decoder
         )
         self.barberService = BarberService(
-            client: SupabaseManager.shared.client
+            client: SupabaseManagerSecure.shared.client
         )
         self.serviceService = ServiceService(
-            client: SupabaseManager.shared.client,
-            decoder: SupabaseManager.shared.decoder
+            client: SupabaseManagerSecure.shared.client,
+            decoder: SupabaseManagerSecure.shared.decoder
         )
         self.appointmentService = AppointmentService(
-            client: SupabaseManager.shared.client
+            client: SupabaseManagerSecure.shared.client
         )
         
         Task {

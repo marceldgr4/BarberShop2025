@@ -1,8 +1,8 @@
 import Foundation
 import Supabase
 
-final class SupabaseManager {
-    static let shared = SupabaseManager()
+final class SupabaseManagerSecure {
+    static let shared = SupabaseManagerSecure()
     let client: SupabaseClient
     
     // MARK: - Custom Date Decoder
@@ -30,12 +30,18 @@ final class SupabaseManager {
     
     // MARK: - Conexion con supabase
     private init() {
-        let supabaseUrl: URL = URL(string: "https://vxcaadneaegpuqhtgkhz.supabase.co")!
-        let supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4Y2FhZG5lYWVncHVxaHRna2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MjA1MjYsImV4cCI6MjA3OTA5NjUyNn0.5oYbrcyYSQTcEiDi0zR6Umr5ZGKbjOFu-GsQs0SwcP0"
-        
-        client = SupabaseClient(
-            supabaseURL: supabaseUrl,
-            supabaseKey: supabaseKey
-        )
+        do{
+            let supabaseUrl = try ConfigManager.shared.getSupabaseURL()
+            let supabaseKey = try ConfigManager.shared.getSupabaseKey()
+            
+            
+            client = SupabaseClient(
+                supabaseURL: supabaseUrl,
+                supabaseKey: supabaseKey
+            )
+            print("Supabase inicializado correctamnete")
+        }catch{
+            fatalError("Error al inicializar Supabase: \(error.localizedDescription)")
+        }
     }
 }
