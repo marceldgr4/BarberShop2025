@@ -1,5 +1,5 @@
 //
-//  SchuduleViewModel.swift
+//  ScheduleViewModel.swift
 //  BarberShop
 //
 //  Created by Marcel DiazGranados Robayo on 8/01/26.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @MainActor
-class SchuduleViewModel: BaseViewModel {
+class ScheduleViewModel: BaseViewModel {
     
     @Published var selectedBarber: BarberWithRating?
     @Published var selectedDate = Date()
@@ -29,6 +29,6 @@ class SchuduleViewModel: BaseViewModel {
     @Published var showAddBreak = false
     @Published var showAddOverride = false
     
-    private let schuduleService = schuduleService()
+    private let scheduleService = ScheduleService()
     
 }
