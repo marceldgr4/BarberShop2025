@@ -30,7 +30,7 @@ import Foundation
     )-> [TimeBlock] {
         var blocks: [TimeBlock] = [ ]
         
-        guard var currentTime = schedule.starTime.toTime(),
+        guard var currentTime = schedule.startTime.toTime(),
               let endTime = schedule.endTime.toTime() else{
             return [ ]
         }
