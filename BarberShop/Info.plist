@@ -2,31 +2,413 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Location Permissions -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location to show nearby barbershops and provide personalized services.</string>
+	<!-- ========================================= -->
+	<!-- INFORMACIÓN BÁSICA DE LA APLICACIÓN -->
+	<!-- ========================================= -->
 	
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We need your location to show nearby barbershops and send you notifications about appointments.</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
 	
-	<!-- Supabase Configuration -->
-	<key>SUPABASE_ANON_KEY</key>
-	<string>sb_publishable_wCrOhPVWSmTjx4SNvbH44A_KyPkTYK4</string>
+	<key>CFBundleDisplayName</key>
+	<string>BarberShop</string>
+	
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	
+	<!-- ========================================= -->
+	<!-- SUPABASE CONFIGURACIÓN (SEGURA) -->
+	<!-- ========================================= -->
+	<!-- IMPORTANTE: En producción, usar variables de entorno -->
+	<!-- o Configuration Settings separados por esquema -->
 	
 	<key>SUPABASE_URL</key>
 	<string>https://vxcaadneaegpuqhtgkhz.supabase.co</string>
 	
-	<!-- URL Schemes -->
+	<key>SUPABASE_ANON_KEY</key>
+	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4Y2FhZG5lYWVncHVxaHRna2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MjA1MjYsImV4cCI6MjA3OTA5NjUyNn0.5oYbrcyYSQTcEiDi0zR6Umr5ZGKbjOFu-GsQs0SwcP0</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE UBICACIÓN -->
+	<!-- ========================================= -->
+	
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Necesitamos tu ubicación para mostrarte las barberías más cercanas y brindarte un mejor servicio personalizado.</string>
+	
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Necesitamos tu ubicación para enviarte recordatorios de citas cuando estés cerca de la barbería y mostrarte las sucursales más cercanas.</string>
+	
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Permitir acceso a tu ubicación nos ayuda a enviarte notificaciones relevantes sobre tus citas.</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE CÁMARA Y FOTOS -->
+	<!-- ========================================= -->
+	
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos acceso a tu cámara para que puedas tomar fotos de perfil y compartir referencias de cortes con tu barbero.</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Necesitamos acceso a tus fotos para que puedas seleccionar imágenes de perfil y referencias de estilos de corte.</string>
+	
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Queremos guardar tus fotos de antes y después de tu corte en tu galería.</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE CONTACTOS -->
+	<!-- ========================================= -->
+	
+	<key>NSContactsUsageDescription</key>
+	<string>Accede a tus contactos para invitar amigos a usar la app y obtener recompensas.</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE CALENDARIO -->
+	<!-- ========================================= -->
+	
+	<key>NSCalendarsUsageDescription</key>
+	<string>Queremos agregar tus citas a tu calendario para que no las olvides.</string>
+	
+	<key>NSRemindersUsageDescription</key>
+	<string>Crear recordatorios automáticos de tus próximas citas.</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE NOTIFICACIONES -->
+	<!-- ========================================= -->
+	
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Enviarte recordatorios de citas, promociones especiales y actualizaciones importantes.</string>
+	
+	<!-- ========================================= -->
+	<!-- PERMISOS DE FACE ID / TOUCH ID -->
+	<!-- ========================================= -->
+	
+	<key>NSFaceIDUsageDescription</key>
+	<string>Usa Face ID para acceder rápidamente y de forma segura a tu cuenta.</string>
+	
+	<!-- ========================================= -->
+	<!-- URL SCHEMES -->
+	<!-- ========================================= -->
+	
 	<key>CFBundleURLTypes</key>
 	<array>
+		<!-- Deep Linking para la app -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.barbershop.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>barbershop</string>
+				<string>barbershopapp</string>
+			</array>
+		</dict>
+		
+		<!-- Universal Links -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.barbershop.universallinks</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>https</string>
 			</array>
 		</dict>
 	</array>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE INTERFAZ -->
+	<!-- ========================================= -->
+	
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string>LaunchImage</string>
+		<key>UIColorName</key>
+		<string>BrandOrange</string>
+	</dict>
+	
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	
+	<key>UIUserInterfaceStyle</key>
+	<string>Automatic</string>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE SEGURIDAD -->
+	<!-- ========================================= -->
+	
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- Permitir conexiones seguras (HTTPS) -->
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		
+		<!-- Excepción para Supabase (si es necesario) -->
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>supabase.co</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<true/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
+			</dict>
+		</dict>
+	</dict>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE CAPABILITIES -->
+	<!-- ========================================= -->
+	
+	<!-- Background Modes -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+		<string>processing</string>
+	</array>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE IDIOMAS -->
+	<!-- ========================================= -->
+	
+	<key>CFBundleDevelopmentRegion</key>
+	<string>es</string>
+	
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>es</string>
+		<string>en</string>
+	</array>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE ARCHIVOS -->
+	<!-- ========================================= -->
+	
+	<!-- Tipos de archivos que la app puede abrir -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.image</string>
+				<string>public.jpeg</string>
+				<string>public.png</string>
+			</array>
+		</dict>
+	</array>
+	
+	<!-- Permitir compartir archivos -->
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
+	
+	<key>UIFileSharingEnabled</key>
+	<false/>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE SCENE -->
+	<!-- ========================================= -->
+	
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE APIS EXTERNAS -->
+	<!-- ========================================= -->
+	
+	<!-- Google Maps API (si lo usas) -->
+	<key>GMSApiKey</key>
+	<string>YOUR_GOOGLE_MAPS_API_KEY_HERE</string>
+	
+	<!-- Firebase (si lo usas) -->
+	<key>FIREBASE_API_KEY</key>
+	<string>YOUR_FIREBASE_API_KEY_HERE</string>
+	
+	<!-- Stripe (si lo usas para pagos) -->
+	<key>STRIPE_PUBLISHABLE_KEY</key>
+	<string>YOUR_STRIPE_PUBLISHABLE_KEY_HERE</string>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE APP CLIPS (OPCIONAL) -->
+	<!-- ========================================= -->
+	
+	<key>NSAppClip</key>
+	<dict>
+		<key>NSAppClipRequestEphemeralUserNotification</key>
+		<true/>
+		<key>NSAppClipRequestLocationConfirmation</key>
+		<true/>
+	</dict>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE WIDGETS (OPCIONAL) -->
+	<!-- ========================================= -->
+	
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE ACCESIBILIDAD -->
+	<!-- ========================================= -->
+	
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	
+	<!-- ========================================= -->
+	<!-- METADATOS DE LA APP -->
+	<!-- ========================================= -->
+	
+	<key>LSMinimumSystemVersion</key>
+	<string>16.0</string>
+	
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE STATUS BAR -->
+	<!-- ========================================= -->
+	
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
+	
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN DE KEYBOARD -->
+	<!-- ========================================= -->
+	
+	<key>UIKeyboardEmojiCategory</key>
+	<true/>
+	
+	<!-- ========================================= -->
+	<!-- APP STORE CONNECT -->
+	<!-- ========================================= -->
+	
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	
+	<!-- ========================================= -->
+	<!-- PRIVACIDAD Y DATOS -->
+	<!-- ========================================= -->
+	
+	<!-- Categorías de datos que recolectas -->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypePhoneNumber</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeEmailAddress</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypeName</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key>
+			<string>NSPrivacyCollectedDataTypePreciseLocation</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key>
+			<true/>
+			<key>NSPrivacyCollectedDataTypeTracking</key>
+			<false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array>
+				<string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+			</array>
+		</dict>
+	</array>
+	
+	<!-- ========================================= -->
+	<!-- CONFIGURACIÓN ADICIONAL -->
+	<!-- ========================================= -->
+	
+	<!-- Prevenir screenshots en contenido sensible -->
+	<key>UIApplicationSupportsSecureViewing</key>
+	<false/>
+	
+	<!-- Soportar Handoff -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.barbershop.booking</string>
+		<string>com.barbershop.viewing</string>
+	</array>
+	
 </dict>
 </plist>

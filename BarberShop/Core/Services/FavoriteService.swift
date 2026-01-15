@@ -12,7 +12,7 @@ final class FavoriteService{
     private let client: SupabaseClient
     
     
-    init(client: SupabaseClient = SupabaseManager.shared.client) {
+    init(client: SupabaseClient = SupabaseManagerSecure.shared.client) {
         self.client = client
        
     }
