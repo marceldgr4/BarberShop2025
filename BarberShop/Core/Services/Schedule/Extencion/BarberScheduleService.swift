@@ -31,7 +31,7 @@ extension ScheduleService{
                 id: UUID(),
                 barberId: barberId,
                 dayOfWeek: schedule.dayOfWeek,
-                starTime: schedule.startTime,
+                startTime: schedule.startTime,
                 endTime: schedule.endTime,
                 isAvailable: schedule.isAvailable,
                 createdAt: Date(),

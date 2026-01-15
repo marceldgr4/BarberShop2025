@@ -11,7 +11,7 @@ struct BarberSchedule: Identifiable, Codable{
     let id: UUID
     let barberId: UUID
     let dayOfWeek: Int
-    let starTime: String
+    let startTime: String
     let endTime: String
     let isAvailable: Bool
     let createdAt: Date
@@ -21,7 +21,7 @@ struct BarberSchedule: Identifiable, Codable{
         case id
         case barberId = "barber_id"
         case dayOfWeek = "day_of_week"
-        case starTime = "star_time"
+        case startTime = "start_time"
         case endTime = "end_time"
         case isAvailable = "is_available"
         case createdAt = "created_at"
@@ -33,6 +33,6 @@ struct BarberSchedule: Identifiable, Codable{
     return days[dayOfWeek]
     }
     var timeRange: String{
-        "\(starTime)- \(endTime)"
+        "\(startTime)- \(endTime)"
     }
 }
