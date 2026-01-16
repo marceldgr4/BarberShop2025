@@ -11,7 +11,7 @@ struct TimeBlock: Identifiable, Codable, Hashable{
     let id: UUID
     let barberId: UUID
     let date: String
-    let starTime: String
+    let startTime: String
     let endTime: String
     let isBooked: Bool
     let appointmentId: UUID?
@@ -21,7 +21,7 @@ struct TimeBlock: Identifiable, Codable, Hashable{
     enum CodingKeys: String, CodingKey{
         case id, date
         case barberId  = "barber_id"
-        case starTime = "star_time"
+        case startTime = "start_time"
         case endTime = "end_star"
         case isBooked = "is_booked"
         case appointmentId = "appointment_id"
@@ -54,7 +54,7 @@ struct TimeBlock: Identifiable, Codable, Hashable{
                 }
             }
     var dateTime : Date?{
-        let dateTimeString = "\(date)\(starTime)"
+        let dateTimeString = "\(date)\(startTime)"
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         return formatter.date(from: dateTimeString)

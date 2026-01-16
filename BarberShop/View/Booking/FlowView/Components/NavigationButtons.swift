@@ -1,23 +1,18 @@
-//
-//  NavigationButtons.swift
-//  BarberShop
-//
-//  Created by Marcel DiazGranados Robayo on 29/12/25.
-//
-
 import SwiftUI
 
 struct NavigationButtons: View {
-    @ObservedObject var viewModel : BookingViewModel
+    @ObservedObject var viewModel: BookingViewModel
+    
     var body: some View {
-        HStack(spacing: 15){
-            if viewModel.currentStep != .selectBranch{
-                Button{
-                    withAnimation{
+        HStack(spacing: 15) {
+            // Back Button
+            if viewModel.currentStep != .selectBranch {
+                Button {
+                    withAnimation {
                         viewModel.previosStep()
                     }
                 } label: {
-                    HStack{
+                    HStack {
                         Image(systemName: "chevron.left")
                         Text("Back")
                     }
@@ -26,17 +21,28 @@ struct NavigationButtons: View {
                     .foregroundColor(.brandOrange)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.brandOrange.opacity(0.3))
+                    .background(Color.brandOrange.opacity(0.1))
                     .cornerRadius(12)
                 }
             }
+            
+            // Continue/Review Button
             Button {
-                withAnimation{
-                    viewModel.nextStep()
+                if viewModel.currentStep == .confirmation {
+                    // Crear la cita
+                    Task {
+                        await viewModel.createBooking()
+                    }
+                } else {
+                    // Continuar al siguiente paso
+                    withAnimation {
+                        viewModel.nextStep()
+                    }
                 }
-            }label: {
-                HStack{
-                    Text(viewModel.currentStep == .selectDateTime ? "review": "Continue")
+            } label: {
+                HStack {
+                    Text(viewModel.currentStep == .confirmation ? "Confirm Booking" :
+                         viewModel.currentStep == .selectDateTime ? "Review" : "Continue")
                     Image(systemName: "chevron.right")
                 }
                 .font(.subheadline)
@@ -44,21 +50,28 @@ struct NavigationButtons: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(viewModel.canProceedToNextStep ?
-                            Color.brandGradient:
-                                LinearGradient(colors: [.gray, .gray],
-                                               startPoint: .leading,
-                                               endPoint: .trailing)
+                .background(
+                    viewModel.canProceedToNextStep ?
+                        Color.brandGradient :
+                        LinearGradient(
+                            colors: [.gray, .gray],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                 )
                 .cornerRadius(12)
-                .shadow(color: viewModel.canProceedToNextStep ? Color.brandOrange.opacity(0.3): .clear, radius: 8, y: 4)
-                
+                .shadow(
+                    color: viewModel.canProceedToNextStep ?
+                        Color.brandOrange.opacity(0.3) : .clear,
+                    radius: 8,
+                    y: 4
+                )
             }
-            .disabled(viewModel.canProceedToNextStep)
+            .disabled(!viewModel.canProceedToNextStep) // ✅ FIXED: Ahora es correcto
         }
         .padding()
         .background(Color(.systemBackground))
-        .shadow(color:.black.opacity(0.1), radius: 10,y:-5)
+        .shadow(color: .black.opacity(0.1), radius: 10, y: -5)
     }
 }
 

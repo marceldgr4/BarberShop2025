@@ -54,7 +54,7 @@ import Foundation
                 id: UUID(),
                 barberId: barberId,
                 date: date,
-                starTime: startTimeStr,
+                startTime: startTimeStr,
                 endTime: endTimeStr,
                 isBooked: appointment != nil,
                 appointmentId: appointment?.id,
