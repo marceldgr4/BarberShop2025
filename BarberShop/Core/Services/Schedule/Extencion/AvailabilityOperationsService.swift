@@ -37,11 +37,11 @@ extension ScheduleService{
         }
         
         guard let timeObj = time.toTime(),
-              let starTime = schedule.startTime.toTime(),
+              let startTime = schedule.startTime.toTime(),
               let endTime = schedule.endTime.toTime() else{
             return false
         }
-        if timeObj < starTime || timeObj >= endTime{
+        if timeObj < startTime || timeObj >= endTime{
             return false
         }
         

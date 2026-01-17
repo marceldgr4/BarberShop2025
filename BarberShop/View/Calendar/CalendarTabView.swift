@@ -11,8 +11,8 @@ struct CalendarTabView: View {
                 WeekNavigator(
                     selectedWeek: viewModel.selectedWeek,
                     selectedDate: $viewModel.selectedDate,
-                    onPrevious: { $viewModel.moveToPreviousWeek() },
-                    onNext: { $viewModel.moveToNextWeek() }
+                    onPrevious: {viewModel.moveToPreviousWeek() },
+                    onNext: {viewModel.moveToNextWeek() }
                 )
                 
                 // Time Blocks

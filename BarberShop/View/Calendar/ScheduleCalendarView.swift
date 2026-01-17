@@ -12,7 +12,7 @@ struct ScheduleCalendarView: View {
     @State private var selectedView: ViewType = .calendar
     
     enum ViewType {
-        case calendar, availabilty, settings
+        case calendar, availability, settings
     }
     
     var body: some View {
@@ -27,7 +27,7 @@ struct ScheduleCalendarView: View {
             }
             Picker("View", selection: $selectedView){
                 Text("Calendar").tag(ViewType.calendar)
-                Text("Availability").tag(ViewType.availabilty)
+                Text("Availability").tag(ViewType.availability)
                 Text("Settings").tag(ViewType.settings)
             }
             .pickerStyle(.segmented)

@@ -40,6 +40,7 @@ final class AppointmentService{
             throw NSError(domain: "Appointment", code: 1, userInfo: [NSLocalizedDescriptionKey: "Status not found"])
         }
         
+        let formattedTime = time.contains(":") ? (time.count == 5 ? "\(time):00": time):"\(time):00:00"
         let appointment = Appointment(
             id: UUID(),
             userId: userId,
@@ -54,11 +55,19 @@ final class AppointmentService{
             createdAt: Date(),
             updatedAt: Date()
         )
+        print("📅 Creating appointment:")
+                print("   Date: \(date)")
+                print("   Time: \(formattedTime)")
+                print("   Branch: \(branchId)")
+                print("   Barber: \(barberId)")
+                print("   Service: \(serviceId)")
         
         try await client
             .from("appointments")
             .insert(appointment)
             .execute()
+        
+        print("Appointment created successfully")
         
         return appointment
     }
@@ -66,6 +75,9 @@ final class AppointmentService{
     /// Obtiene las citas del usuario actual
     func fecthUserAppointments() async throws -> [AppointmentDetail] {
         let userId = try await client.auth.session.user.id
+        
+        print("Fetching appointments for user: \(userId)")
+        
         let response = try await client
             .from("appointments")
             .select("""
@@ -85,7 +97,9 @@ final class AppointmentService{
         
         let json = try JSONSerialization.jsonObject(with: response.data) as? [[String: Any]] ?? []
         
-        return json.compactMap { dict -> AppointmentDetail? in
+        print("Found \(json.count) appointments")
+        
+        let appointments = json.compactMap { dict -> AppointmentDetail? in
             guard let id = dict["id"] as? String,
                   let date = dict["appointment_date"] as? String,
                   let time = dict["appointment_time"] as? String,
@@ -99,7 +113,9 @@ final class AppointmentService{
                   let branch = dict["branches"] as? [String: Any],
                   let branchName = branch["name"] as? String,
                   let branchAddress = branch["address"] as? String
-            else { return nil }
+            else {
+                print("Fail to parse appointment: \(dict)")
+                return nil }
             
             return AppointmentDetail(
                 id: UUID(uuidString: id) ?? UUID(),
@@ -115,6 +131,9 @@ final class AppointmentService{
                 branchAddress: branchAddress
             )
         }
+        
+        print("Successfully parsed \(appointments.count) appointments")
+        return appointments
     }
    
 }

@@ -19,7 +19,7 @@ struct HomeHeaderView: View {
                     .font(.caption)
                     .foregroundColor(.gray)
                 HStack(spacing: 4){
-                    Image(systemName: "mapping.circle.fill")
+                    Image(systemName: "mappin.circle.fill")
                         .foregroundColor(.brandOrange)
                         .imageScale(.small)
                     Text(locationManager.cityName)
