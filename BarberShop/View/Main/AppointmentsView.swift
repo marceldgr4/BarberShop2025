@@ -46,17 +46,32 @@ struct AppointmentsView: View {
                 .padding()
             }
             //MARK: Appointment List
-            else{
+            else if !viewModel.appointments.isEmpty {
                 List{
                     ForEach(viewModel.appointments) { appointment in
                         AppointmentRow(appointment: appointment)
                     }
                 }
                 .listStyle(.insetGrouped)
+                .refreshable {
+                    await viewModel.loadAppointments()
+                }
                 
             }
             if viewModel.isLoading{
-                ProgressView()
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                VStack(spacing:15){
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .tint(.white)
+                    Text("Loading appointments...")
+                        .foregroundColor(.white)
+                        .font(.subheadline)
+                }
+                .padding(30)
+                .background(.ultraThinMaterial)
+                .cornerRadius(15)
             }
         }
         .navigationTitle("My Appointments")
@@ -76,9 +91,30 @@ struct AppointmentsView: View {
         .task {
             await viewModel.loadAppointments()
         }
+        .onAppear{
+            Task{
+                await viewModel.loadAppointments()
+            }
+        }
+        .alert("ERROR",isPresented: .constant(viewModel.errorMessage != nil)){
+            Button("OK"){
+                viewModel.errorMessage = nil
+            }
+            Button("Retry"){
+                Task{
+                    await viewModel.loadAppointments()
+                }
+            }
+        } message: {
+            if let error = viewModel.errorMessage{
+                Text(error)
+            }
+        }
     }
 }
 
 #Preview {
-    AppointmentsView().environmentObject(AuthViewModel())
+    NavigationStack{
+        AppointmentsView().environmentObject(AuthViewModel())
+    }
 }

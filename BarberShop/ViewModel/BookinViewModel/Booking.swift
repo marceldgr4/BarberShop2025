@@ -11,24 +11,35 @@ extension BookingViewModel{
     func createBooking() async{
         guard let branch = selectedBranch,
               let barber = selectedBarber,
-              let service = selectedServices.first,
-              let time = selectedTime else{
-            errorMessage = "Complete all required fields"
+              //let service = selectedServices.first,
+              !selectedServices.isEmpty,
+                let time = selectedTime else{
+            errorMessage = "Please complete all required fields"
             return
         }
-        await load { [self] in
+        isLoading = true
+        errorMessage = nil
+        
+        do{
             let date = formattedDate(selectedDate)
+            let service = selectedServices[0]
             
-            self.bookingConfirmation = try await self.appointmentService.createAppointment(branchId: branch.id,
-                                                                                 barberId: barber.id,
-                                                                                 serviceId: service.id,
-                                                                                 date: date,
-                                                                                 time: time,
-                                                                                           price: self.totalPrice,
-                                                                                           notes: notes.isEmpty ? nil : self.notes
+            bookingConfirmation = try await appointmentService.createAppointment(
+                branchId: branch.id,
+                barberId: barber.id,
+                serviceId: service.id,
+                date: date,
+                time: time,
+                price: totalPrice,
+                notes: notes.isEmpty ? nil : notes
             )
             showSuccess = true
+            print("booking created successfullu: \(bookingConfirmation?.id ?? UUID())")
+        } catch{
+            errorMessage = "Fail to create booking: \(error.localizedDescription)"
+            print("booking error: \(error)")
         }
+        isLoading = false
     }
     
     private func formattedDate(_ date: Date) -> String{
