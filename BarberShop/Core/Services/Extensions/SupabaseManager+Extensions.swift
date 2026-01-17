@@ -120,7 +120,7 @@ extension SupabaseManagerSecure{
             rating: Int,
             comment: String?
         ) async throws {
-            let reviewService = ReviwsService(client: client, decoder: decoder)
+            let reviewService = ReviewsService(client: client, decoder: decoder)
             try await reviewService.createReview(
                 branchId: branchId,
                 barberId: barberId,
@@ -131,7 +131,7 @@ extension SupabaseManagerSecure{
         }
         
         func fetchReviews(barberId: UUID) async throws -> [Review] {
-            let reviewService = ReviwsService(client: client, decoder: decoder)
+            let reviewService = ReviewsService(client: client, decoder: decoder)
             return try await reviewService.fetchReviews(barberId: barberId)
         }
 }

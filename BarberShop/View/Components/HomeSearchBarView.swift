@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeSeachBarView: View {
+struct HomeSearchBarView: View {
     @Binding var text: String
     var body: some View {
         HStack(spacing:12){
@@ -34,5 +34,5 @@ struct HomeSeachBarView: View {
 }
 
 #Preview {
-    HomeSeachBarView(text:.constant(""))
+    HomeSearchBarView(text:.constant(""))
 }

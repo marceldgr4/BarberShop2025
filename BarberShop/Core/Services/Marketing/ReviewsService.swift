@@ -8,7 +8,7 @@
 import Foundation
 import Supabase
 
-final class ReviwsService{
+final class ReviewsService{
     private let client: SupabaseClient
     private let decoder: JSONDecoder
     

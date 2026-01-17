@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+// MARK: - AdminFeatures Schedule Models
+import AdminFeatures.Schedule.Models
+import AdminFeatures.Schedule.Services
+
 @MainActor
 class ScheduleViewModel: BaseViewModel {
     

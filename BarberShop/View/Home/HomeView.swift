@@ -24,7 +24,7 @@ struct HomeView: View {
                         showNotifications = true
                         print("Notification tapped")
                     }
-                    HomeSeachBarView(text: $searchText)
+                    HomeSearchBarView(text: $searchText)
                     
                     HomeMapSectionView(viewModel: viewModel)
                     
