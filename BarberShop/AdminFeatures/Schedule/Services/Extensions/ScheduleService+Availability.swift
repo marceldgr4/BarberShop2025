@@ -84,7 +84,7 @@ extension ScheduleService{
     }
     
     
-    private func isHoliday(date: String) async throws -> Bool {
+     func isHoliday(date: String) async throws -> Bool {
         let response = try await client
             .from("holidays")
             .select()
