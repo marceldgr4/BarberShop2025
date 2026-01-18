@@ -45,7 +45,7 @@ struct BranchSelectionCard: View {
                         }
                     }
                     HStack(spacing: 6){
-                        Image(systemName: "mapping.circle.fill")
+                        Image(systemName: "mappin.circle.fill")
                             .foregroundColor(.red)
                             .font(.caption)
                         Text(branch.address)

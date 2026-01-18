@@ -44,7 +44,7 @@ struct SelectBarberView: View {
             }
             //search bar
             HStack(spacing:12){
-                Image(systemName: "magnifyinnglass")
+                Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
                 TextField("searh barber...",text: $searchText)
                     .textInputAutocapitalization(.never)
