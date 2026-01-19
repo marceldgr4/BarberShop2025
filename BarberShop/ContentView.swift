@@ -13,10 +13,14 @@ import Supabase
 struct ContentView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @State private var isAuthenticated = false
+    @State private var isFirstLaunch = !UserDefaults.standard.hasCompletedOnboarding
     
     var body: some View {
         Group {
-            if isAuthenticated {
+            if isFirstLaunch{
+                OnboardingView(isFirstLaunch: $isFirstLaunch)
+            }
+            else if isAuthenticated {
                 MainTabView()
             } else {
                 LoginView()
