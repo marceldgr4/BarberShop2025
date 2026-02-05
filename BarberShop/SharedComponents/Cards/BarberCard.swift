@@ -1,33 +1,33 @@
-
 import SwiftUI
 
 struct BarberCard: View {
     let barber: BarberWithRating
-    
+
     var body: some View {
-        VStack( alignment: .leading, spacing: 8){
+        VStack(alignment: .leading, spacing: 8) {
             AsyncImage(url: URL(string: barber.photoUrl ?? "")) {
-                image in image
+                image in
+                image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                
+
             } placeholder: {
                 Rectangle()
-                    .fill(Color.orange.opacity(0.3))
+                    .fill(Color.brandPrimary.opacity(0.3))
                     .overlay(
                         Image(systemName: "person.fill")
-                            
-                            .foregroundColor(.brandOrange)
-                            
+
+                            .foregroundColor(.brandAccent)
+
                     )
             }
-            .frame(width: 100,height: 100)
+            .frame(width: 100, height: 100)
             .clipShape(RoundedRectangle(cornerRadius: 30))
-            
+
             Text(barber.name)
                 .font(.headline)
                 .lineLimit(1)
-            if let rating = barber.rating, let totalReviews = barber.totalReviews{
+            if let rating = barber.rating, let totalReviews = barber.totalReviews {
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill")
                         .font(.caption)
@@ -45,12 +45,14 @@ struct BarberCard: View {
 }
 
 #Preview {
-    BarberCard(barber: BarberWithRating(id: UUID(),
-                                        branchId: UUID(),
-                                        specialtyId: nil,
-                                        name: "prueba 1",
-                                        photoUrl: nil,
-                                        isActive: true,
-                                        rating: 4.8,
-                                        totalReviews: 156))
+    BarberCard(
+        barber: BarberWithRating(
+            id: UUID(),
+            branchId: UUID(),
+            specialtyId: nil,
+            name: "prueba 1",
+            photoUrl: nil,
+            isActive: true,
+            rating: 4.8,
+            totalReviews: 156))
 }

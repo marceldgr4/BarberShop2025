@@ -60,7 +60,7 @@ struct ScheduleCalendarView: View {
                     }
                 }
                 label: { Image(systemName:"plus.circle.fill")
-                        .foregroundColor(.orange)
+                        .foregroundColor(.brandAccent)
                 }
             }
         }

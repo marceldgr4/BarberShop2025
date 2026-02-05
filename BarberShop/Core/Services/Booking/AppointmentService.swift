@@ -55,7 +55,7 @@ final class AppointmentService{
             createdAt: Date(),
             updatedAt: Date()
         )
-        print("📅 Creating appointment:")
+        print(" Creating appointment:")
                 print("   Date: \(date)")
                 print("   Time: \(formattedTime)")
                 print("   Branch: \(branchId)")

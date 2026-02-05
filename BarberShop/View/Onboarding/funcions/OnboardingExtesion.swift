@@ -7,26 +7,25 @@
 
 //
 
-
 import Foundation
 import SwiftUI
 
 // MARK: - Animated Button Style
 struct OnboardingButtonStyle: ButtonStyle {
     let isEnabled: Bool
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .opacity(configuration.isPressed ? 0.9 : 1.0)
-            .animation(.spring(response: 0.3), value: configuration.isPressed)
+            .animation(.spring(response: 0.5), value: configuration.isPressed)
     }
 }
 
 // MARK: - Page Transition Modifier
 struct PageTransition: ViewModifier {
     let isActive: Bool
-    
+
     func body(content: Content) -> some View {
         content
             .scaleEffect(isActive ? 1.0 : 0.9)
@@ -45,7 +44,7 @@ extension View {
 struct ParticleView: View {
     @State private var particles: [Particle] = []
     let color: Color
-    
+
     struct Particle: Identifiable {
         let id = UUID()
         var x: CGFloat
@@ -53,7 +52,7 @@ struct ParticleView: View {
         var scale: CGFloat
         var opacity: Double
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -69,7 +68,7 @@ struct ParticleView: View {
             }
         }
     }
-    
+
     private func startAnimation(in size: CGSize) {
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
             let newParticle = Particle(
@@ -79,7 +78,7 @@ struct ParticleView: View {
                 opacity: Double.random(in: 0.3...0.7)
             )
             particles.append(newParticle)
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 particles.removeAll { $0.id == newParticle.id }
             }
@@ -91,17 +90,17 @@ struct ParticleView: View {
 struct EnhancedOnboardingPageView: View {
     let page: OnboardingPage
     @State private var isAnimating = false
-    
+
     var body: some View {
         ZStack {
             // Background particles
             ParticleView(color: .white)
-                .opacity(0.3)
+                .opacity(0.6)
                 .allowsHitTesting(false)
-            
+
             VStack(spacing: 0) {
                 Spacer()
-                
+
                 // Icon with glow effect
                 ZStack {
                     Circle()
@@ -110,12 +109,12 @@ struct EnhancedOnboardingPageView: View {
                         .blur(radius: 10)
                         .scaleEffect(isAnimating ? 1.1 : 0.9)
                         .opacity(isAnimating ? 0.8 : 0.4)
-                    
+
                     Circle()
                         .fill(Color.white.opacity(0.15))
                         .frame(width: 220, height: 220)
                         .scaleEffect(isAnimating ? 1.0 : 0.9)
-                    
+
                     Image(systemName: page.imageName)
                         .resizable()
                         .scaledToFit()
@@ -125,7 +124,7 @@ struct EnhancedOnboardingPageView: View {
                         .shadow(color: .white.opacity(0.5), radius: 20)
                 }
                 .padding(.bottom, 60)
-                
+
                 // Content
                 VStack(spacing: 20) {
                     Text(page.title)
@@ -135,7 +134,7 @@ struct EnhancedOnboardingPageView: View {
                         .shadow(color: .black.opacity(0.3), radius: 5)
                         .opacity(isAnimating ? 1.0 : 0.0)
                         .offset(y: isAnimating ? 0 : 30)
-                    
+
                     Text(page.description)
                         .font(.system(size: 17, weight: .regular))
                         .foregroundColor(.white.opacity(0.95))
@@ -144,14 +143,14 @@ struct EnhancedOnboardingPageView: View {
                         .opacity(isAnimating ? 1.0 : 0.0)
                         .offset(y: isAnimating ? 0 : 30)
                 }
-                
+
                 Spacer()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             LinearGradient(
-                colors: [page.backgroundColor, page.backgroundColor.opacity(0.7)],
+                colors: [page.backgroundColor, page.backgroundColor.opacity(0.8)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -168,24 +167,50 @@ struct EnhancedOnboardingPageView: View {
 struct OnboardingProgressBar: View {
     let currentPage: Int
     let totalPages: Int
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 // Background
                 Rectangle()
-                    .fill(Color.white.opacity(0.3))
+                    .fill(Color.black.opacity(0.4))
                     .frame(height: 4)
-                    .cornerRadius(2)
-                
+                    .cornerRadius(5)
+
                 // Progress
                 Rectangle()
-                    .fill(Color.white)
-                    .frame(width: geometry.size.width * CGFloat(currentPage + 1) / CGFloat(totalPages), height: 4)
-                    .cornerRadius(2)
+                    .fill(Color.brandAccent)
+                    .frame(
+                        width: geometry.size.width * CGFloat(currentPage + 1) / CGFloat(totalPages),
+                        height: 9
+                    )
+                    .cornerRadius(5)
                     .animation(.spring(response: 0.5), value: currentPage)
             }
         }
         .frame(height: 4)
     }
+}
+#Preview("Onboarding Page - Welcome") {
+    EnhancedOnboardingPageView(
+        page: OnboardingPage(
+            title: "sparkles",
+            description: "Bienvenido",
+            imageName: "Descubre la mejor experiencia de barbería",
+            backgroundColor: Color(red: 0.0, green: 0.4, blue: 0.8), showSkip: false
+        ))
+}
+
+#Preview("Progress Bar - Start") {
+    OnboardingProgressBar(currentPage: 0, totalPages: 4)
+}
+
+#Preview("Progress Bar - Middle") {
+    OnboardingProgressBar(currentPage: 2, totalPages: 4)
+
+}
+
+#Preview("Progress Bar - End") {
+    OnboardingProgressBar(currentPage: 3, totalPages: 4)
+
 }

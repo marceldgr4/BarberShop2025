@@ -4,7 +4,7 @@ struct EditProfileView: View {
     let user: User?
     @StateObject private var viewModel = EditProfileViewModel()
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         Form {
             // MARK: - Profile Photo Section
@@ -19,11 +19,11 @@ struct EditProfileView: View {
                         } placeholder: {
                             Image(systemName: "person.circle.fill")
                                 .resizable()
-                                .foregroundColor(.orange)
+                                .foregroundColor(.brandAccent)
                         }
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
-                        
+
                         Button(action: {
                             // TODO: Implementar cambio de foto
                         }) {
@@ -35,7 +35,7 @@ struct EditProfileView: View {
                     Spacer()
                 }
             }
-            
+
             // MARK: - Personal Information
             Section("Personal Information") {
                 // Full Name
@@ -44,32 +44,32 @@ struct EditProfileView: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
-                    
+
                     TextField("Enter your name", text: $viewModel.fullName)
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled()
                         .textFieldStyle(.roundedBorder)
                 }
-                
+
                 // Phone
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Phone Number", systemImage: "phone.fill")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
-                    
+
                     TextField("+57 3xx xxx xxxx", text: $viewModel.phone)
                         .keyboardType(.phonePad)
                         .textFieldStyle(.roundedBorder)
                 }
-                
+
                 // Email (Solo lectura)
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Email", systemImage: "envelope.fill")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
-                    
+
                     Text(viewModel.email)
                         .foregroundColor(.gray)
                         .font(.body)
@@ -81,41 +81,41 @@ struct EditProfileView: View {
                 }
                 .listRowBackground(Color.clear)
             }
-            
+
             // MARK: - Success Message
             if viewModel.showSuccess {
                 Section {
                     HStack(spacing: 10) {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                        
+
                         Text("Profile updated successfully!")
                             .font(.subheadline)
                             .foregroundColor(.green)
-                        
+
                         Spacer()
                     }
                 }
                 .listRowBackground(Color.green.opacity(0.1))
             }
-            
+
             // MARK: - Error Message
             if let errorMessage = viewModel.errorMessage {
                 Section {
                     HStack(spacing: 10) {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundColor(.red)
-                        
+
                         Text(errorMessage)
                             .font(.caption)
                             .foregroundColor(.red)
-                        
+
                         Spacer()
                     }
                 }
                 .listRowBackground(Color.red.opacity(0.1))
             }
-            
+
             // MARK: - Save Button
             Section {
                 Button(action: {
@@ -130,7 +130,7 @@ struct EditProfileView: View {
                 }) {
                     HStack {
                         Spacer()
-                        
+
                         if viewModel.isLoading {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -141,7 +141,7 @@ struct EditProfileView: View {
                                 .fontWeight(.bold)
                             Image(systemName: "checkmark.circle.fill")
                         }
-                        
+
                         Spacer()
                     }
                     .foregroundColor(.white)
@@ -151,7 +151,7 @@ struct EditProfileView: View {
                         Group {
                             if viewModel.hasChanges && viewModel.isValid {
                                 LinearGradient(
-                                    colors: [Color.orange, Color.red],
+                                    colors: [Color.brandSecondary, Color.brandPrimary],
                                     startPoint: .leading,
                                     endPoint: .trailing
                                 )
@@ -170,7 +170,7 @@ struct EditProfileView: View {
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
             }
-            
+
             // MARK: - Discard Changes Button
             if viewModel.hasChanges {
                 Section {
@@ -195,7 +195,7 @@ struct EditProfileView: View {
                 Button("Cancel") {
                     dismiss()
                 }
-                .foregroundColor(.orange)
+                .foregroundColor(.brandAccent)
             }
         }
         .onAppear {
@@ -206,21 +206,20 @@ struct EditProfileView: View {
     }
 }
 
-
-
 // MARK: - Preview
 #Preview {
     NavigationStack {
-        EditProfileView(user: User(
-            id: UUID(),
-            fullName: "Marcel Diaz",
-            phone: "+57 300 123 4567",
-            email: "marcel@example.com",
-            photoUrl: nil,
-                        isActive: true,
-            createdAt: Date(),
-            updatedAt: Date(),
-            rolId: UUID(),
-        ))
+        EditProfileView(
+            user: User(
+                id: UUID(),
+                fullName: "Marcel Diaz",
+                phone: "+57 300 123 4567",
+                email: "marcel@example.com",
+                photoUrl: nil,
+                isActive: true,
+                createdAt: Date(),
+                updatedAt: Date(),
+                rolId: UUID(),
+            ))
     }
 }

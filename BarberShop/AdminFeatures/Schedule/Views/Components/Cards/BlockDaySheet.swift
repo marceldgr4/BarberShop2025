@@ -102,7 +102,7 @@ struct BlockDaySheet: View {
                 Section {
                     HStack(spacing: 10) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.brandAccent)
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Important")

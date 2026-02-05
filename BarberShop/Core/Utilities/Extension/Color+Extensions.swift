@@ -34,16 +34,24 @@ extension Color {
         )
     }
     
+    // MARK: - New Brand Colors
+    static let brandPrimary = Color(hex: "#676F6D")      // Gray-blue
+    static let brandSecondary = Color(hex: "#424769")    // Dark blue-gray
+    static let brandDark = Color(hex: "#2D3250")         // Darker blue-gray
+    static let brandAccent = Color(hex: "#F6B17A")       // Peachy accent
+    static let brandWhite = Color(hex: "#FFFFFF")        // White
     
-    static let brandOrange = Color(hex: "#EE8F40")
+    // Legacy support - maps to new primary color
+    static let brandOrange = Color.brandAccent
     
-    static let brandGradient = LinearGradient(colors: [Color.brandOrange, Color.orange],
-                                              startPoint: .leading,
-                                              endPoint: .trailing
+    static let brandGradient = LinearGradient(
+        colors: [Color.brandSecondary, Color.brandPrimary],
+        startPoint: .leading,
+        endPoint: .trailing
     )
     
     static let brandGradientVertical = LinearGradient(
-        colors:[Color.brandOrange, Color.orange],
+        colors: [Color.brandSecondary, Color.brandDark],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
