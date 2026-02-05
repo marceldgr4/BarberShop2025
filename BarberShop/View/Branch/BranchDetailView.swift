@@ -40,7 +40,7 @@ struct BranchDetailView: View {
                         Text(branch.name)
                             .font(.title)
                             .fontWeight(.bold)
-                            .foregroundColor(.orange)
+                            .foregroundColor(.brandAccent)
                             .padding(.horizontal)
                         
                         HStack(spacing: 8) {

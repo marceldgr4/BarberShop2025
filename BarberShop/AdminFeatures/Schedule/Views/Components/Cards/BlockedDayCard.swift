@@ -16,7 +16,7 @@ struct BlockedDayCard: View {
                // Icon
                ZStack {
                    Circle()
-                       .fill(Color(.orange).opacity(0.1))
+                       .fill(Color.brandAccent.opacity(0.1))
                        .frame(width: 44, height: 44)
                    
                    Image(systemName: override.reason.icon)

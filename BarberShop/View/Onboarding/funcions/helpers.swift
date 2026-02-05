@@ -42,29 +42,25 @@ extension OnboardingView {
         print("📄 Total pages: \(pages.count)")
         print("📄 Last page index: \(pages.count - 1)")
         
-        // Si estamos en la última página, completar onboarding
+        // ✅ FIX: Verificar primero si estamos en la última página
         if currentPage == pages.count - 1 {
             print("✅ Last page detected - completing onboarding")
             completeOnboarding()
             return
         }
         
-        // Si no, revisar si necesitamos permisos
-        switch currentPage {
-        case 3: // Notifications page
+        // ✅ FIX: Revisar permisos SOLO en las páginas específicas Y que NO sean la última
+        if currentPage == 3 && currentPage != pages.count - 1 {
+            // Página de notificaciones
             print("📬 Notifications page - showing alert")
             permissionType = .notifications
-            showPermissionAlert = true
-            
-        case 4: // Location page (solo si no es la última)
-            print("📍 Location page - showing alert")
-            permissionType = .location
-            showPermissionAlert = true
-            
-        default:
-            print("➡️ Moving to next page")
-            moveToNextPage()
+            showPermissionAlert = false
+            return
         }
+        
+        // ✅ FIX: Si llegamos aquí, simplemente avanzar a la siguiente página
+        print("➡️ Moving to next page")
+        moveToNextPage()
     }
     
     func moveToPreviousPage() {
@@ -82,7 +78,8 @@ extension OnboardingView {
                 currentPage += 1
                 print("➡️ Moved to page: \(currentPage)")
             } else {
-                print("⚠️ Already at last page, cannot move next")
+                print("⚠️ Already at last page, calling completeOnboarding")
+                completeOnboarding()
             }
         }
     }

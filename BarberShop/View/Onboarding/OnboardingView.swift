@@ -5,35 +5,34 @@
 //  Created by Marcel DiazGranados Robayo on 18/01/26.
 //
 
+import CoreLocation
 import SwiftUI
 import UserNotifications
-import CoreLocation
-
 
 struct OnboardingView: View {
     @Binding var isFirstLaunch: Bool
-    @State  var currentPage = 0
-    @State  var showPermissionAlert = false
-    @State  var permissionType: PermissionType?
+    @State var currentPage = 0
+    @State var showPermissionAlert = false
+    @State var permissionType: PermissionType?
     @State private var dragOffset: CGFloat = 0
-    
+
     let pages = OnboardingPage.pages
     let haptic = UIImpactFeedbackGenerator(style: .medium)
-    
+
     var body: some View {
         ZStack {
             // Background gradient
             LinearGradient(
                 colors: [
                     pages[currentPage].backgroundColor,
-                    pages[currentPage].backgroundColor.opacity(0.7)
+                    pages[currentPage].backgroundColor.opacity(0.7),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
             .animation(.easeInOut(duration: 0.5), value: currentPage)
-            
+
             // Main content
             VStack {
                 // Top bar with progress and skip button
@@ -42,44 +41,48 @@ struct OnboardingView: View {
                         currentPage: currentPage,
                         totalPages: pages.count
                     )
-                    .frame(height: 4)
+                    .frame(height: 5)
                     .padding(.horizontal, 20)
-                    
+
                     Spacer()
-                    
+
                     if pages[currentPage].showSkip {
                         Button(action: skipOnboarding) {
                             Text("Skip")
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(.system(size: 15, weight: .bold))
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 20)
-                                .padding(.vertical, 8)
+                                .padding(.vertical, 5)
                                 .background(
-                                    Capsule().fill(Color.white.opacity(0.2))
-                                )
+                                    Capsule()
+                                        .fill(Color.black)
+                                        .overlay(
+                                            Capsule().stroke(Color.white.opacity(0.5), lineWidth: 1)
+                                        )
+                                ).shadow(color: .black, radius: 5, y: 2)
                         }
                         .padding(.trailing, 20)
                     }
                 }
-                .padding(.top, 50)
-                
+                .padding(.top, 20)
+
                 Spacer()
-                
+
                 // Bottom controls
-                VStack(spacing: 25) {
+                VStack(spacing: 3) {
                     // Page indicators
-                    HStack(spacing: 8) {
+                    HStack(spacing: 10) {
                         ForEach(0..<pages.count, id: \.self) { index in
                             Circle()
-                                .fill(currentPage == index ? Color.white : Color.white.opacity(0.4))
+                                .fill(currentPage == index ? Color.black : Color.white)
                                 .frame(
-                                    width: currentPage == index ? 12 : 8,
-                                    height: currentPage == index ? 12 : 8
+                                    width: currentPage == index ? 12 : 10,
+                                    height: currentPage == index ? 12 : 10
                                 )
                                 .overlay(
                                     Circle()
                                         .stroke(
-                                            Color.white.opacity(0.5),
+                                            Color.white.opacity(0.9),
                                             lineWidth: currentPage == index ? 2 : 0
                                         )
                                         .frame(
@@ -87,61 +90,64 @@ struct OnboardingView: View {
                                             height: currentPage == index ? 20 : 8
                                         )
                                 )
-                                .scaleEffect(currentPage == index ? 1.0 : 0.8)
-                                .animation(.spring(response: 0.4, dampingFraction: 0.7), value: currentPage)
+                                .shadow(color: .black, radius: 4, y: 2)
+                                .scaleEffect(currentPage == index ? 1.0 : 0.9)
+                                .animation(
+                                    .spring(response: 0.4, dampingFraction: 0.7), value: currentPage
+                                )
                         }
                     }
                     .padding(.bottom, 10)
-                    
+
                     // Main action button
                     Button(action: {
                         haptic.impactOccurred()
                         handleButtonTap()
                     }) {
-                        HStack(spacing: 12) {
+                        HStack(spacing: 15) {
                             Text(buttonTitle)
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 20, weight: .bold))
                             if currentPage < pages.count - 1 {
                                 Image(systemName: "arrow.right")
-                                    .font(.system(size: 16, weight: .bold))
+                                    .font(.system(size: 20, weight: .bold))
                             } else {
                                 Image(systemName: "checkmark")
-                                    .font(.system(size: 16, weight: .bold))
+                                    .font(.system(size: 20, weight: .bold))
                             }
                         }
-                        .foregroundColor(pages[currentPage].backgroundColor)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
                         .background(
                             RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.white)
-                                .shadow(color: .black.opacity(0.15), radius: 15, y: 8)
+                                .fill(Color.brandGradient)
+                                .shadow(color: .black.opacity(0.4), radius: 15, y: 8)
                         )
                     }
                     .buttonStyle(OnboardingButtonStyle(isEnabled: true))
                     .padding(.horizontal, 30)
-                    
+
                     // Back button
                     if currentPage > 0 {
                         Button(action: {
                             haptic.impactOccurred()
                             moveToPreviousPage()
                         }) {
-                            HStack(spacing: 8) {
+                            HStack(spacing: 10) {
                                 Image(systemName: "arrow.left")
-                                    .font(.system(size: 16, weight: .semibold))
+                                    .font(.system(size: 20, weight: .semibold))
                                 Text("Back")
-                                    .font(.system(size: 16, weight: .semibold))
+                                    .font(.system(size: 20, weight: .semibold))
                             }
-                            .foregroundColor(.white.opacity(0.9))
+                            .foregroundColor(.white)
                             .padding(.vertical, 12)
                         }
                         .transition(.opacity)
                     }
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, 25)
             }
-            
+
             // TabView for pages
             TabView(selection: $currentPage) {
                 ForEach(Array(pages.enumerated()), id: \.element.id) { index, page in
@@ -151,6 +157,7 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
+            .allowsHitTesting(false)
         }
         .alert("Permission Required", isPresented: $showPermissionAlert) {
             Button("Allow", role: .none) {
@@ -168,7 +175,7 @@ struct OnboardingView: View {
     }
 }
 
-#Preview {
+#Preview() {
     OnboardingView(isFirstLaunch: .constant(true))
 }
 #Preview("First Page") {
