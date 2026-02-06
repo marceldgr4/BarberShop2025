@@ -9,7 +9,7 @@ import Foundation
 import Supabase
 
 final class AppointmentService{
-    private let client: SupabaseClient
+    internal let client: SupabaseClient
     
     init(client: SupabaseClient = SupabaseManagerSecure.shared.client) {
         self.client = client

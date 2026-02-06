@@ -8,66 +8,83 @@
 import Foundation
 import Combine
 
-
 @MainActor
 class AppointmentViewModel: ObservableObject {
-    private let appointmentService = AppointmentService()
+    // MARK: - Changed from private to internal so extensions can access
+    internal let appointmentService = AppointmentService()
     
-    @Published var appointments : [AppointmentDetail] = [ ]
+    // MARK: - Published Properties
+    @Published var appointments: [AppointmentDetail] = []
     @Published var selectedBranch: Branch?
     @Published var selectedBarber: BarberWithRating?
     @Published var selectedService: Service?
     @Published var selectedDate = Date()
     @Published var selectedTime = "09:00"
-    @Published var notes = " "
+    @Published var notes = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var showSuccess = false
     
-    //private let supabase = SupabaseManager.shared
+    // MARK: - Filter Properties (moved from extension)
+    @Published var selectedFilter: AppointmentFilter = .all
+    @Published var filteredAppointment: [AppointmentDetail] = []
     
-    func loadAppointments() async{
+    // MARK: - Load Appointments
+    func loadAppointments() async {
         isLoading = true
-    
-        do{
+        errorMessage = nil
+        
+        do {
             appointments = try await appointmentService.fecthUserAppointments()
-            
-        }catch{
+            print("✅ Loaded \(appointments.count) appointments")
+        } catch {
             errorMessage = error.localizedDescription
+            print("❌ Error loading appointments: \(error)")
         }
+        
         isLoading = false
     }
+    
+    // MARK: - Create Appointment
     func createAppointment() async {
         guard let branch = selectedBranch,
               let barber = selectedBarber,
-              let service = selectedService else{
-            errorMessage = "please select all required fileds"
+              let service = selectedService else {
+            errorMessage = "Please select all required fields"
             return
         }
+        
         isLoading = true
         errorMessage = nil
+        
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-mm-dd"
+        formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: selectedDate)
         
         do {
-            _ = try await appointmentService.createAppointment(branchId: branch.id,
-                                                     barberId: barber.id,
-                                                     serviceId: service.id,
-                                                     date: dateString,
-                                                     time: selectedTime,
-                                                     price: service.price,
-                                                     notes: notes.isEmpty ? nil: notes
+            _ = try await appointmentService.createAppointment(
+                branchId: branch.id,
+                barberId: barber.id,
+                serviceId: service.id,
+                date: dateString,
+                time: selectedTime,
+                price: service.price,
+                notes: notes.isEmpty ? nil : notes
             )
             showSuccess = true
             resetSelection()
             await loadAppointments()
-        }catch{
+            print("✅ Appointment created successfully")
+        } catch {
             errorMessage = error.localizedDescription
+            print("❌ Error creating appointment: \(error)")
         }
+        
         isLoading = false
     }
-    func resetSelection(){
+    
+    // MARK: - Reset Selection
+    func resetSelection() {
         selectedBranch = nil
         selectedBarber = nil
         selectedService = nil
@@ -75,5 +92,4 @@ class AppointmentViewModel: ObservableObject {
         selectedTime = "09:00"
         notes = ""
     }
-    
 }

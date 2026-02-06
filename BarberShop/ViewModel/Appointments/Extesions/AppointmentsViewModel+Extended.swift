@@ -9,22 +9,20 @@ import Foundation
 import Combine
 import UserNotifications
 
-extension AppointmentViewModel{
+extension AppointmentViewModel {
     
-    @Published var selectedFilter: AppointmentFilter = .all
-    @Published var filteredAppointment: [AppointmentDetail] = []
-    
-    func applyFilter(_ filter: AppointmentFilter) async{
+    // MARK: - Filter Methods
+    func applyFilter(_ filter: AppointmentFilter) async {
         selectedFilter = filter
         isLoading = true
         errorMessage = nil
         
-        do{
-            filteredAppointment = try await appointmentsService.fetchFilteredAppointments(filter: filter)
-            print("filtered appointment: \(filteredAppointment.count)")
-        } catch{
-            errorMessage = "failed to filter appointment: \(error.localizedDescription)"
-            print("filter error: \(error)")
+        do {
+            filteredAppointment = try await appointmentService.fetchFilteredAppointments(filter: filter)
+            print("✅ Filtered appointment: \(filteredAppointment.count)")
+        } catch {
+            errorMessage = "Failed to filter appointment: \(error.localizedDescription)"
+            print("❌ Filter error: \(error)")
         }
         isLoading = false
     }

@@ -31,12 +31,18 @@ extension AppointmentService {
             ])
         }
         
-        // Actualizar el appointment
-        let update: [String: Any] = [
-            "status_id": cancelledStatusId,
-            "updated_at": ISO8601DateFormatter().string(from: Date()),
-            "cancellation_reason": customReason ?? reason.rawValue
-        ]
+        // Usar estructura Encodable en lugar de diccionario
+        struct AppointmentUpdate: Encodable {
+            let status_id: String
+            let updated_at: String
+            let cancellation_reason: String
+        }
+        
+        let update = AppointmentUpdate(
+            status_id: cancelledStatusId,
+            updated_at: ISO8601DateFormatter().string(from: Date()),
+            cancellation_reason: customReason ?? reason.rawValue
+        )
         
         try await client
             .from("appointments")
@@ -55,11 +61,17 @@ extension AppointmentService {
     ) async throws {
         let formattedTime = formatTime(newTime)
         
-        let update: [String: Any] = [
-            "appointment_date": newDate,
-            "appointment_time": formattedTime,
-            "updated_at": ISO8601DateFormatter().string(from: Date())
-        ]
+        struct AppointmentReschedule: Encodable {
+            let appointment_date: String
+            let appointment_time: String
+            let updated_at: String
+        }
+        
+        let update = AppointmentReschedule(
+            appointment_date: newDate,
+            appointment_time: formattedTime,
+            updated_at: ISO8601DateFormatter().string(from: Date())
+        )
         
         try await client
             .from("appointments")
