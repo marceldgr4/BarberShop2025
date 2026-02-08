@@ -17,7 +17,7 @@ final class NotificationService: ObservableObject{
     @Published var unreadCount: Int = 0
     
     private let cacheKey = "Notifications"
-    private let notificationCenter = UNUserNotificationCenter.current()
+     let notificationCenter = UNUserNotificationCenter.current()
     
     private init(){
         loadNotification()

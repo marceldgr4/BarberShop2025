@@ -79,7 +79,7 @@ extension AppointmentService {
             .eq("id", value: appointmentId.uuidString)
             .execute()
         
-        print("✅ Appointment rescheduled to \(newDate) at \(formattedTime)")
+        print(" Appointment rescheduled to \(newDate) at \(formattedTime)")
     }
     
     // MARK: - Get Appointment Details
@@ -139,7 +139,7 @@ extension AppointmentService {
     }
     
     // MARK: - Filter Appointments
-    func fetchFilteredAppointments(filter: AppointmentFilter) async throws -> [AppointmentDetail] {
+    func fetchFilteredAppointments(filter: AppointmentDetail.AppointmentFilter) async throws -> [AppointmentDetail] {
         let allAppointments = try await fecthUserAppointments()
         
         switch filter {
