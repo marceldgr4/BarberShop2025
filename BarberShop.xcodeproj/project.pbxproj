@@ -30,6 +30,16 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		47BB09F32F385B2E006C9AA3 /* testUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = testUITests;
+			sourceTree = "<group>";
+		};
+		47BB09F42F385B69006C9AA3 /* testTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = testTests;
+			sourceTree = "<group>";
+		};
 		47BBED492ECD7B4A00DB258D /* BarberShop */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -60,6 +70,8 @@
 		47BBED3E2ECD7B4A00DB258D = {
 			isa = PBXGroup;
 			children = (
+				47BB09F42F385B69006C9AA3 /* testTests */,
+				47BB09F32F385B2E006C9AA3 /* testUITests */,
 				47BBED492ECD7B4A00DB258D /* BarberShop */,
 				47BBED482ECD7B4A00DB258D /* Products */,
 			);
@@ -89,6 +101,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				47BB09F32F385B2E006C9AA3 /* testUITests */,
+				47BB09F42F385B69006C9AA3 /* testTests */,
 				47BBED492ECD7B4A00DB258D /* BarberShop */,
 			);
 			name = BarberShop;

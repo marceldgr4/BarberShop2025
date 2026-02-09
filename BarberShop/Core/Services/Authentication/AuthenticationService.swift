@@ -68,10 +68,15 @@ final class AuthenticationService{
             .from("users")
             .select()
             .eq("id", value: session.user.id.uuidString)
-            .single()
             .execute()
         
-        return try decoder.decode(User.self, from: response.data)
+        let user = try decoder.decode([User].self, from: response.data)
+        
+        guard let user = user.first else{
+            print("User Not found in datebase for session:\(session.user.id)")
+            return nil
+        }
+        return user
     }
     
     /// Obtiene el rol por defecto (cliente)
