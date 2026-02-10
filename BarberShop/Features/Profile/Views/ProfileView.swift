@@ -11,8 +11,8 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var showLogoutAlert = false
-    @State private var refreshID = UUID() // ✅ Para forzar recarga
-    
+    @State private var refreshID = UUID()  // ✅ Para forzar recarga
+
     var body: some View {
         List {
             // MARK: - User Info Section
@@ -29,13 +29,13 @@ struct ProfileView: View {
                     }
                     .frame(width: 70, height: 70)
                     .clipShape(Circle())
-                    
+
                     if let user = viewModel.user {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(user.fullName)
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                            
+
                             if let email = user.email {
                                 Text(email)
                                     .font(.caption)
@@ -57,10 +57,11 @@ struct ProfileView: View {
                 }
                 .padding(.vertical, 10)
             }
-            
+
             // MARK: - My Activity Section
             Section("My Activity") {
-                NavigationLink(destination: FavoriteBarbersView(barbers: viewModel.favoriteBarbers)) {
+                NavigationLink(destination: FavoriteBarbersView(barbers: viewModel.favoriteBarbers))
+                {
                     HStack {
                         Label("Favorite barbers", systemImage: "heart")
                         Spacer()
@@ -76,39 +77,40 @@ struct ProfileView: View {
                     }
                 }
             }
-            
+
             // MARK: - Settings Section
-            Section("Settings"){
+            Section("Settings") {
                 NavigationLink(destination: EditProfileView(user: viewModel.user)) {
                     Label("Edit Profile", systemImage: "person.circle")
                 }
-                .simultaneousGesture(TapGesture().onEnded {
-                    // Cuando regrese de EditProfileView, recargar el perfil
-                    Task {
-                        try? await Task.sleep(nanoseconds: 500_000_000) // Pequeño delay
-                        await viewModel.loadProfile()
-                    }
-                })
-                
-                NavigationLink(destination: NotificationsSettingsView()){
-                    Label("Notifications",systemImage: "bell")
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        // Cuando regrese de EditProfileView, recargar el perfil
+                        Task {
+                            try? await Task.sleep(nanoseconds: 500_000_000)  // Pequeño delay
+                            await viewModel.loadProfile()
+                        }
+                    })
+
+                NavigationLink(destination: NotificationsSettingsView()) {
+                    Label("Notifications", systemImage: "bell")
                 }
-                NavigationLink(destination: PrivacySettingsView()){
+                NavigationLink(destination: PrivacySettingsView()) {
                     Label("Privacy", systemImage: "lock.shield")
                 }
             }
-            
+
             // MARK: - Support Section
             Section("Support") {
                 Link(destination: URL(string: "mailto:support@barberShop.com")!) {
                     Label("Contact Support", systemImage: "envelope")
                 }
-                
+
                 NavigationLink(destination: AboutView()) {
                     Label("About", systemImage: "info.circle")
                 }
             }
-            
+
             // MARK: - Logout Section
             Section {
                 Button(action: {
@@ -125,20 +127,15 @@ struct ProfileView: View {
         }
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)
-        .task(id: refreshID) { //  Recarga cuando cambia refreshID
+        .task(id: refreshID) {  //  Recarga cuando cambia refreshID
             if viewModel.user == nil {
-                await viewModel.loadProfile()
-            }
-        }
-        .onAppear { //  Recarga al aparecer (después de editar)
-            Task {
                 await viewModel.loadProfile()
             }
         }
         .refreshable {
             await viewModel.loadProfile()
         }
-        
+
         // MARK: - Alerts
         .alert("Sign Out", isPresented: $showLogoutAlert) {
             Button("Cancel", role: .cancel) {}
@@ -150,8 +147,14 @@ struct ProfileView: View {
         } message: {
             Text("Are you sure you want to sign out?")
         }
-        
-        .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
+
+        .alert(
+            "Error",
+            isPresented: Binding<Bool>(
+                get: { viewModel.errorMessage != nil },
+                set: { _ in viewModel.errorMessage = nil }
+            )
+        ) {
             Button("OK") {
                 viewModel.errorMessage = nil
             }

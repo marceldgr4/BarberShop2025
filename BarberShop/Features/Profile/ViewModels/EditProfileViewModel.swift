@@ -1,6 +1,10 @@
 // MARK: - ViewModel
 import Foundation
 import Combine
+import PhotosUI
+import SwiftUI
+import UIKit
+
 @MainActor
 
 class EditProfileViewModel: ObservableObject {
@@ -9,6 +13,13 @@ class EditProfileViewModel: ObservableObject {
     @Published var email = ""
     @Published var photoUrl: String?
     
+    ///propiedades para las imagen
+    @Published var selectedImage: UIImage?
+    @Published var selectedPhotoItem: PhotosPickerItem?
+    @Published var showImagePicker = false
+    @Published var isUploadingImage = false
+    
+    
     @Published var isLoading = false
     @Published var showSuccess = false
     @Published var errorMessage: String?
@@ -16,6 +27,7 @@ class EditProfileViewModel: ObservableObject {
     private var originalUser: User?
     private let supabase = SupabaseManagerSecure.shared
     private let profileUserService = AuthenticationService()
+    private let imagenUploadService = ImageUploadService()
     
     
     var hasChanges: Bool {
@@ -53,16 +65,32 @@ class EditProfileViewModel: ObservableObject {
         showSuccess = false
         
         do {
+            var updatedPhotoUrl = photoUrl
+            if let newImage = selectedImage{
+                isUploadingImage = true
+                
+                if let oldUrl = photoUrl{
+                    try? await imagenUploadService.deleteProfileImage(imageURL: oldUrl)
+                }
+                updatedPhotoUrl = try await imagenUploadService.uploadProfileImage(
+                    userId: userId,
+                    image: newImage)
+                isUploadingImage = false
+            }
+            
             let trimmedPhone = phone.trimmingCharacters(in: .whitespaces)
             
             try await profileUserService.updateUser(
                 userId: userId,
                 fullName: fullName.trimmingCharacters(in: .whitespaces),
-                phone: trimmedPhone.isEmpty ? nil : trimmedPhone
+                phone: trimmedPhone.isEmpty ? nil : trimmedPhone,
+                photoUrl: updatedPhotoUrl
             )
             
             showSuccess = true
             print("<-OK-> Profile updated successfully")
+            
+            
             
             // Actualizar el usuario original con los nuevos valores
             if var updatedUser = originalUser {
@@ -98,5 +126,25 @@ class EditProfileViewModel: ObservableObject {
         }
         errorMessage = nil
         showSuccess = false
+    }
+    
+    ///funcion para manejar las selecion de imagen
+    func handleImagenSelection(){
+        Task{
+            guard let photoItem = selectedPhotoItem else{ return}
+            do{
+                guard let imageData = try await photoItem.loadTransferable(type: Data.self),
+                      let image = UIImage(data: imageData)else{
+                    errorMessage = "Could not load image"
+                    return
+                }
+                
+                selectedImage = image
+                print("image selected successfully")
+            } catch {
+                errorMessage = "error loading image: \(error.localizedDescription)"
+                print(" Error loading image:\(error)")
+            }
+        }
     }
 }

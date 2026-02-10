@@ -47,7 +47,17 @@ final class AppointmentService{
             branchId: branchId,
             barberId: barberId,
             serviceId: serviceId,
-            statusId: UUID(uuidString: statusId)!,
+        guard let validStatusId = UUID(uuidString: statusId) else {
+            throw NSError(domain: "Appointment", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid status ID format"])
+        }
+        
+        let appointment = Appointment(
+            id: UUID(),
+            userId: userId,
+            branchId: branchId,
+            barberId: barberId,
+            serviceId: serviceId,
+            statusId: validStatusId,
             appointmentDate: date,
             appointmentTime: time,
             totalPrice: price,
@@ -157,7 +167,10 @@ final class AppointmentService{
         guard let statusId = json?["id"] as? String else {
             throw NSError(domain: "Appointment", code: 1, userInfo: [NSLocalizedDescriptionKey: "Status not found"])
         }
-        return UUID(uuidString: statusId)!
+        guard let validStatusId = UUID(uuidString: statusId) else {
+             throw NSError(domain: "Appointment", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid status ID format"])
+        }
+        return validStatusId
     }
     
     func fecthAppointmentByStatus(status: String) async throws -> [AppointmentDetail] {

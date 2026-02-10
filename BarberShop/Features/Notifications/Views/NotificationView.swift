@@ -43,7 +43,7 @@ struct NotificationView: View {
                             Label("Clear all", systemImage: "trash")
                         }
                     }label: {
-                        Image(systemName: "ellispsis.circle")
+                        Image(systemName: "ellipsis.circle")
                             .foregroundColor(.brandOrange)
                     }
                 }
