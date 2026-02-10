@@ -1,9 +1,11 @@
 import SwiftUI
+import PhotosUI
 
 struct EditProfileView: View {
     let user: User?
     @StateObject private var viewModel = EditProfileViewModel()
     @Environment(\.dismiss) private var dismiss
+    @State private var isPickerPresented = false
 
     var body: some View {
         Form {
@@ -23,17 +25,53 @@ struct EditProfileView: View {
                         }
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
-
-                        Button(action: {
-                            // TODO: Implementar cambio de foto
-                        }) {
-                            Text("Change Photo")
-                                .font(.caption)
-                                .foregroundColor(.blue)
+                        .overlay(
+                            Circle().stroke(Color.brandOrange, lineWidth: 3)
+                        )
+                        PhotosPicker(
+                            selection: $viewModel.selectedPhotoItem,
+                            matching: .images,
+                            photoLibrary: .shared()
+                        ){
+                            HStack(spacing:6) {
+                                Image(systemName: "camera.fill")
+                                Text(viewModel.selectedImage != nil ? "Change photo": "Add photo")
+                            }
+                            /*
+                             .font(.subheadline)
+                             .fontWeight(.semibold)
+                             .foregroundColor(.brandOrange)
+                             .padding(.horizontal,16)
+                             .padding(.vertical,8)
+                             .background(Color.brandOrange.opacity(0.2))
+                             .cornerRadius(20)
+                             }
+                             .onChange(of: viewModel.selectedPhotoItem) { _ in viewModel.handleImagenSelection()
+                             }*/
+                        }
+                        .onAppear{
+                            isPickerPresented = true
+                        }
+                        .onDisappear{
+                            isPickerPresented = false
+                        }
+                        
+                                  if viewModel.isUploadingImage {
+                            HStack(spacing: 8){
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                                Text("Uploading photo...")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
+                        
+                                  
+                       
                     Spacer()
                 }
+                    .listRowBackground(Color.clear)
             }
 
             // MARK: - Personal Information
@@ -191,11 +229,13 @@ struct EditProfileView: View {
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Cancel") {
-                    dismiss()
+            if !isPickerPresented{
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .foregroundColor(.brandAccent)
                 }
-                .foregroundColor(.brandAccent)
             }
         }
         .onAppear {

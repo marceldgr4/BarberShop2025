@@ -8,30 +8,30 @@
 import SwiftUI
 
 struct AppointmentsView: View {
-    @StateObject private var viewModel = AppointmentViewModel()
+    @EnvironmentObject var viewModel: AppointmentViewModel
     @State private var showBooking = false
-    
+
     var body: some View {
-        ZStack{
-            if viewModel.appointments.isEmpty && !viewModel.isLoading{
-                VStack(spacing: 20){
+        ZStack {
+            if viewModel.appointments.isEmpty && !viewModel.isLoading {
+                VStack(spacing: 20) {
                     Image(systemName: "calendar.badge.exclamationmark")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80,height: 80)
+                        .frame(width: 80, height: 80)
                         .foregroundColor(.gray.opacity(0.5))
                     Text("No appointment Yet")
                         .font(.title2)
                         .fontWeight(.bold)
-                    Text("book your first appointment to get started" )
+                    Text("book your first appointment to get started")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
-                    
+
                     Button(action: {
                         showBooking = true
-                    }){
-                        HStack{
+                    }) {
+                        HStack {
                             Image(systemName: "plus.circle.fill")
                             Text("Book appointment")
                                 .fontWeight(.semibold)
@@ -47,7 +47,7 @@ struct AppointmentsView: View {
             }
             //MARK: Appointment List
             else if !viewModel.appointments.isEmpty {
-                List{
+                List {
                     ForEach(viewModel.appointments) { appointment in
                         AppointmentRow(appointment: appointment)
                     }
@@ -56,12 +56,12 @@ struct AppointmentsView: View {
                 .refreshable {
                     await viewModel.loadAppointments()
                 }
-                
+
             }
-            if viewModel.isLoading{
+            if viewModel.isLoading {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
-                VStack(spacing:15){
+                VStack(spacing: 15) {
                     ProgressView()
                         .scaleEffect(1.5)
                         .tint(.white)
@@ -75,38 +75,42 @@ struct AppointmentsView: View {
             }
         }
         .navigationTitle("My Appointments")
-        .toolbar{
-            ToolbarItem(placement: .navigationBarTrailing){
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     showBooking = true
-                }){
+                }) {
                     Image(systemName: "plus")
                         .foregroundColor(Color.brandOrange)
                 }
             }
         }
-        .sheet(isPresented: $showBooking){
+        .sheet(isPresented: $showBooking) {
             BookingFlowView()
         }
         .task {
-            await viewModel.loadAppointments()
-        }
-        .onAppear{
-            Task{
+            // Only load if empty to avoid constant re-fetching on tab switching if data exists
+            if viewModel.appointments.isEmpty {
                 await viewModel.loadAppointments()
             }
         }
-        .alert("ERROR",isPresented: .constant(viewModel.errorMessage != nil)){
-            Button("OK"){
+        .alert(
+            "ERROR",
+            isPresented: Binding<Bool>(
+                get: { viewModel.errorMessage != nil },
+                set: { _ in viewModel.errorMessage = nil }
+            )
+        ) {
+            Button("OK") {
                 viewModel.errorMessage = nil
             }
-            Button("Retry"){
-                Task{
+            Button("Retry") {
+                Task {
                     await viewModel.loadAppointments()
                 }
             }
         } message: {
-            if let error = viewModel.errorMessage{
+            if let error = viewModel.errorMessage {
                 Text(error)
             }
         }
@@ -114,7 +118,9 @@ struct AppointmentsView: View {
 }
 
 #Preview {
-    NavigationStack{
-        AppointmentsView().environmentObject(AuthViewModel())
+    NavigationStack {
+        AppointmentsView()
+            .environmentObject(AuthViewModel())
+            .environmentObject(AppointmentViewModel())
     }
 }
