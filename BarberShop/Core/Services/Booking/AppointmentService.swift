@@ -28,6 +28,8 @@ final class AppointmentService{
         notes: String?
     ) async throws -> Appointment {
         let userId = try await client.auth.session.user.id
+        
+        // Obtener el status "pending"
         let statusResponse = try await client
             .from("appointment_status")
             .select()
@@ -40,48 +42,45 @@ final class AppointmentService{
             throw NSError(domain: "Appointment", code: 1, userInfo: [NSLocalizedDescriptionKey: "Status not found"])
         }
         
-        let formattedTime = time.contains(":") ? (time.count == 5 ? "\(time):00": time):"\(time):00:00"
-        let appointment = Appointment(
-            id: UUID(),
-            userId: userId,
-            branchId: branchId,
-            barberId: barberId,
-            serviceId: serviceId,
+        // ✅ Validar que el statusId sea un UUID válido
         guard let validStatusId = UUID(uuidString: statusId) else {
             throw NSError(domain: "Appointment", code: 2, userInfo: [NSLocalizedDescriptionKey: "Invalid status ID format"])
         }
         
+        // Formatear tiempo correctamente
+        let formattedTime: String
+        if time.contains(":") {
+            formattedTime = time.count == 5 ? "\(time):00" : time
+        } else {
+            formattedTime = "\(time):00:00"
+        }
+        
+        // ✅ Crear el appointment con el UUID validado
         let appointment = Appointment(
             id: UUID(),
             userId: userId,
             branchId: branchId,
             barberId: barberId,
             serviceId: serviceId,
-            statusId: validStatusId,
+            statusId: validStatusId, // ✅ Usar el UUID validado
             appointmentDate: date,
-            appointmentTime: time,
+            appointmentTime: formattedTime,
             totalPrice: price,
             notes: notes,
             createdAt: Date(),
             updatedAt: Date()
         )
-        print(" Creating appointment:")
-        print("   Date: \(date)")
-        print("   Time: \(formattedTime)")
-        print("   Branch: \(branchId)")
-        print("   Barber: \(barberId)")
-        print("   Service: \(serviceId)")
         
         try await client
             .from("appointments")
             .insert(appointment)
             .execute()
         
-        print("Appointment created successfully")
         
         return appointment
     }
-    
+        
+     
     /// Obtiene las citas del usuario actual
     func fecthUserAppointments() async throws -> [AppointmentDetail] {
         let userId = try await client.auth.session.user.id

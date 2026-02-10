@@ -15,28 +15,45 @@ final class ImageUploadService{
         self.client = client
     }
     
-    func uploadProfileImage(userId:UUID, image: UIImage) async throws -> String{
-        guard let imageData = image.jpegData(compressionQuality: 0.7) else{
-            throw ImageUploadError.invalidImage
-        }
+    // En ImageUploadService.swift
+    func uploadProfileImage(userId: UUID, image: UIImage) async throws -> String {
+        // ✅ Verificar sesión
+          let session = try await client.auth.session
+          print("👤 User authenticated: \(session.user.id)")
+          print("🔑 Access token present: \(session.accessToken.isEmpty ? "NO" : "YES")")
+          
+          print("📸 Starting upload for user: \(userId)")
+          
+          guard let imageData = image.jpegData(compressionQuality: 0.7) else {
+              print("❌ Failed to convert image to JPEG")
+              throw ImageUploadError.invalidImage
+          }
+        
+        print("📦 Image data size: \(imageData.count) bytes")
         
         let timestamp = Int(Date().timeIntervalSince1970)
         let fileName = "\(userId.uuidString)_\(timestamp).jpg"
         let filePath = "profile_photo/\(fileName)"
+        
+        print("📂 Upload path: \(filePath)")
         
         let uploadedPath = try await client.storage
             .from("avatars")
             .upload(
                 filePath,
                 data: imageData,
-                    options: FileOptions( contentType:"image/jpeg" ,upsert:true))
+                options: FileOptions(contentType: "image/jpeg", upsert: true)
+            )
+        
+        print("✅ Upload successful: \(uploadedPath)")
         
         let publicURL = try client.storage
             .from("avatars")
             .getPublicURL(path: filePath)
-        print("Image uploaded successfully: \(publicURL)")
-        return publicURL.absoluteString
         
+        print("🔗 Public URL: \(publicURL.absoluteString)")
+        
+        return publicURL.absoluteString
     }
     func deleteProfileImage(imageURL: String) async throws{
         guard let url = URL(string: imageURL),

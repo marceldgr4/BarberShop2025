@@ -54,7 +54,6 @@ class EditProfileViewModel: ObservableObject {
             return
         }
         
-        //  Validación
         guard isValid else {
             errorMessage = "Name cannot be empty"
             return
@@ -66,20 +65,32 @@ class EditProfileViewModel: ObservableObject {
         
         do {
             var updatedPhotoUrl = photoUrl
-            if let newImage = selectedImage{
+            
+            // ✅ SUBIR IMAGEN SI HAY UNA NUEVA SELECCIONADA
+            if let newImage = selectedImage {
                 isUploadingImage = true
                 
-                if let oldUrl = photoUrl{
+                // Eliminar foto vieja si existe
+                if let oldUrl = photoUrl, !oldUrl.isEmpty {
                     try? await imagenUploadService.deleteProfileImage(imageURL: oldUrl)
                 }
+                
+                // Subir nueva foto
                 updatedPhotoUrl = try await imagenUploadService.uploadProfileImage(
                     userId: userId,
-                    image: newImage)
+                    image: newImage
+                )
+                
+                // ✅ ACTUALIZAR photoUrl LOCAL INMEDIATAMENTE
+                photoUrl = updatedPhotoUrl
+                
                 isUploadingImage = false
+                print("✅ Photo uploaded successfully: \(updatedPhotoUrl)")
             }
             
             let trimmedPhone = phone.trimmingCharacters(in: .whitespaces)
             
+            // ✅ ACTUALIZAR USUARIO CON LA NUEVA URL
             try await profileUserService.updateUser(
                 userId: userId,
                 fullName: fullName.trimmingCharacters(in: .whitespaces),
@@ -88,36 +99,37 @@ class EditProfileViewModel: ObservableObject {
             )
             
             showSuccess = true
-            print("<-OK-> Profile updated successfully")
+            print("✅ Profile updated successfully")
             
-            
-            
-            // Actualizar el usuario original con los nuevos valores
+            // ✅ ACTUALIZAR originalUser CON NUEVA FOTO
             if var updatedUser = originalUser {
                 updatedUser = User(
                     id: updatedUser.id,
                     fullName: fullName.trimmingCharacters(in: .whitespaces),
                     phone: trimmedPhone.isEmpty ? nil : trimmedPhone,
                     email: updatedUser.email,
-                    photoUrl: updatedUser.photoUrl,
-                   
+                    photoUrl: updatedPhotoUrl, // ✅ USAR LA NUEVA URL
                     isActive: updatedUser.isActive,
                     createdAt: updatedUser.createdAt,
                     updatedAt: Date(),
-                    rolId: updatedUser.rolId,
+                    rolId: updatedUser.rolId
                 )
                 originalUser = updatedUser
             }
             
+            // ✅ LIMPIAR LA IMAGEN SELECCIONADA
+            selectedImage = nil
+            selectedPhotoItem = nil
+            
         } catch {
-            print(" <-X-> Error saving profile: \(error)")
+            print("❌ Error saving profile: \(error)")
             errorMessage = error.localizedDescription
             showSuccess = false
+            isUploadingImage = false
         }
         
         isLoading = false
     }
-    
     func discardChanges() {
         if let original = originalUser {
             fullName = original.fullName

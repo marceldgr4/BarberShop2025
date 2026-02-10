@@ -10,54 +10,63 @@ struct EditProfileView: View {
     var body: some View {
         Form {
             // MARK: - Profile Photo Section
+            // MARK: - Profile Photo Section
             Section {
                 HStack {
                     Spacer()
                     VStack(spacing: 12) {
-                        AsyncImage(url: URL(string: user?.photoUrl ?? "")) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } placeholder: {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .foregroundColor(.brandAccent)
+                        // ✅ MOSTRAR LA IMAGEN SELECCIONADA O LA EXISTENTE
+                        Group {
+                            if let selectedImage = viewModel.selectedImage {
+                                Image(uiImage: selectedImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } else if let photoUrl = user?.photoUrl, !photoUrl.isEmpty {
+                                AsyncImage(url: URL(string: photoUrl)) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                } placeholder: {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .foregroundColor(.brandAccent)
+                                }
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(.brandAccent)
+                            }
                         }
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
                         .overlay(
                             Circle().stroke(Color.brandOrange, lineWidth: 3)
                         )
+                        
                         PhotosPicker(
                             selection: $viewModel.selectedPhotoItem,
                             matching: .images,
                             photoLibrary: .shared()
-                        ){
-                            HStack(spacing:6) {
+                        ) {
+                            HStack(spacing: 6) {
                                 Image(systemName: "camera.fill")
-                                Text(viewModel.selectedImage != nil ? "Change photo": "Add photo")
+                                Text(viewModel.selectedImage != nil ? "Change photo" : "Add photo")
                             }
-                            /*
-                             .font(.subheadline)
-                             .fontWeight(.semibold)
-                             .foregroundColor(.brandOrange)
-                             .padding(.horizontal,16)
-                             .padding(.vertical,8)
-                             .background(Color.brandOrange.opacity(0.2))
-                             .cornerRadius(20)
-                             }
-                             .onChange(of: viewModel.selectedPhotoItem) { _ in viewModel.handleImagenSelection()
-                             }*/
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.brandOrange)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.brandOrange.opacity(0.2))
+                            .cornerRadius(20)
                         }
-                        .onAppear{
-                            isPickerPresented = true
-                        }
-                        .onDisappear{
-                            isPickerPresented = false
+                        // ✅ AGREGAR EL .onChange QUE ESTABA COMENTADO
+                        .onChange(of: viewModel.selectedPhotoItem) { _ in
+                            viewModel.handleImagenSelection()
                         }
                         
-                                  if viewModel.isUploadingImage {
-                            HStack(spacing: 8){
+                        if viewModel.isUploadingImage {
+                            HStack(spacing: 8) {
                                 ProgressView()
                                     .scaleEffect(0.8)
                                 Text("Uploading photo...")
@@ -66,14 +75,10 @@ struct EditProfileView: View {
                             }
                         }
                     }
-                        
-                                  
-                       
                     Spacer()
                 }
-                    .listRowBackground(Color.clear)
+                .listRowBackground(Color.clear)
             }
-
             // MARK: - Personal Information
             Section("Personal Information") {
                 // Full Name
