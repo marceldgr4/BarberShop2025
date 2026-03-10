@@ -12,7 +12,7 @@ struct Branch: Identifiable, Codable, Hashable{
     let barbershopId: UUID
     let name: String
     let address: String
-    let email: String
+    let email: String?
     let latitude: Double?
     let longitude: Double?
     let phone: String

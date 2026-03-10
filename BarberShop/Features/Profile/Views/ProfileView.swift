@@ -18,7 +18,7 @@ struct ProfileView: View {
             // MARK: - User Info Section
             Section {
                 HStack(spacing: 15) {
-                    AsyncImage(url: URL(string: viewModel.user?.photoUrl ?? "")) { image in
+                    AsyncImage(url: URL(string: viewModel.user?.avatarUrl ?? "")) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)

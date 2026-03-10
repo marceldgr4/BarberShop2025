@@ -10,7 +10,7 @@ import Foundation
 struct Profile: Identifiable, Codable {
     let id: UUID
     let fullName: String
-    let email: String
+    let email: String?
     let avatarUrl: String?
     let phone: String?
     let isActive: Bool

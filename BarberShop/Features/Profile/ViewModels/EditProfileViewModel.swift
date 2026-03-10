@@ -11,6 +11,7 @@ class EditProfileViewModel: ObservableObject {
     @Published var fullName = ""
     @Published var phone = ""
     @Published var avatarUrl: String?
+    @Published var email = ""
     
     // Imagen
     @Published var selectedImage: UIImage?
@@ -48,6 +49,7 @@ class EditProfileViewModel: ObservableObject {
         fullName = user.fullName
         phone = user.phone ?? ""
         avatarUrl = user.avatarUrl
+        email = user.email!
     }
     
     // MARK: - Save
@@ -103,6 +105,7 @@ class EditProfileViewModel: ObservableObject {
             originalUser = Profile(
                 id: userId,
                 fullName: trimmedName,
+                email: "",
                 avatarUrl: updatedPhotoUrl,
                 phone: trimmedPhone.isEmpty ? nil : trimmedPhone,
                 isActive: originalUser?.isActive ?? true,
