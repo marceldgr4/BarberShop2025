@@ -171,7 +171,7 @@ struct MapView: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: "phone.fill")
                                         .foregroundColor(.blue)
-                                    Text(branch.phone!)
+                                    Text(branch.phone)
                                         .font(.subheadline)
                                 }
                                 
@@ -218,7 +218,7 @@ struct MapView: View {
                                 
                                 // Call
                                 Button(action: {
-                                    let phoneNumber = branch.phone!.filter { $0.isNumber }
+                                    let phoneNumber = branch.phone.filter { $0.isNumber }
                                     guard !phoneNumber.isEmpty,
                                           let url = URL(string: "tel://\(phoneNumber)") else {
                                         return

@@ -57,7 +57,7 @@ struct BranchSelectionCard: View {
                         Image(systemName: "phone.fill")
                             .foregroundColor(.brandOrange)
                             .font(.caption)
-                        Text(branch.phone!)
+                        Text(branch.phone)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
