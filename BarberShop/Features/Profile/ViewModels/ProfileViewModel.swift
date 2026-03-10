@@ -12,7 +12,7 @@ import Combine
 class ProfileViewModel: ObservableObject {
    
     
-    @Published var user: User?
+    @Published var user: Profile?
     @Published var appointments: [AppointmentDetail] = []
     @Published var favoriteBarbers: [BarberWithRating] = [ ]
     @Published var isLoading = false

@@ -63,15 +63,15 @@ struct Triangle: Shape {
         
         BranchMapMarker(
             branch: Branch(
-                id: UUID(),
+                id: UUID(), barbershopId: UUID(),
                 name: "Central Barbershop",
                 address: "Calle 72 #45-67, Barranquilla",
+                email: "central@barbershop.com",
                 latitude: 10.9878,
                 longitude: -74.7889,
                 phone: "+57 300 123 4567",
-                email: "central@barbershop.com",
+                imagenUrl: nil,
                 isActive: true,
-                imageUrl: nil,
                 createdAt: Date(),
                 updatedAt: Date()
             ),
@@ -90,15 +90,16 @@ struct Triangle: Shape {
         HStack(spacing: 30) {
             BranchMapMarker(
                 branch: Branch(
-                    id: UUID(),
+                    id: UUID(), barbershopId: UUID(),
                     name: "Central",
                     address: "Calle 72",
+                    email: "central@barbershop.com",
                     latitude: 10.9878,
                     longitude: -74.7889,
                     phone: "+57 300 123 4567",
-                    email: "central@barbershop.com",
+                    imagenUrl: nil,
                     isActive: true,
-                    imageUrl: nil,
+                    
                     createdAt: Date(),
                     updatedAt: Date()
                 ),
@@ -107,15 +108,16 @@ struct Triangle: Shape {
             
             BranchMapMarker(
                 branch: Branch(
-                    id: UUID(),
+                    id: UUID(), barbershopId: UUID(),
                     name: "Norte",
                     address: "Calle 84",
+                    email: "norte@barbershop.com",
                     latitude: 11.0205,
                     longitude: -74.8029,
                     phone: "+57 300 123 4568",
-                    email: "norte@barbershop.com",
+                    imagenUrl: nil,
                     isActive: true,
-                    imageUrl: nil,
+                   
                     createdAt: Date(),
                     updatedAt: Date()
                 ),

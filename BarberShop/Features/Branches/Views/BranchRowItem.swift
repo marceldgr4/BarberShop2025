@@ -12,7 +12,7 @@ struct BranchRowItem: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: URL(string: branch.imageUrl ?? "")) {
+            AsyncImage(url: URL(string: branch.imagenUrl ?? "")) {
                 image in
                 image
                     .resizable()
@@ -39,7 +39,7 @@ struct BranchRowItem: View {
                 HStack(spacing: 4) {
                     Image(systemName: "phone.fill")
                         .font(.caption2)
-                    Text(branch.phone)
+                    Text(branch.phone!)
                         .font(.caption)
                 }
                 .foregroundColor(.brandAccent)
@@ -51,15 +51,16 @@ struct BranchRowItem: View {
 #Preview {
     BranchRowItem(
         branch: Branch(
-            id: UUID(),
+            id: UUID(), barbershopId: UUID(),
             name: "Center BarBerShop",
             address: "calle 72 # 45-67, Barranquilla",
+            email: "Example@prueba.com",
             latitude: 10.9878,
             longitude: -74.7889,
             phone: "+57 315 xxx xxxx",
-            email: "Example@prueba.com",
+            imagenUrl: nil,
             isActive: true,
-            imageUrl: nil,
+            
             createdAt: Date(),
             updatedAt: Date()))
 }

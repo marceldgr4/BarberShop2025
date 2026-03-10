@@ -16,7 +16,7 @@ struct BranchSelectionCard: View {
     var body: some View {
         Button(action: onTap){
             VStack(alignment: .leading, spacing: 12){
-                AsyncImage(url: URL(string: branch.imageUrl ?? "")){ image in image
+                AsyncImage(url: URL(string: branch.imagenUrl ?? "")){ image in image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 } placeholder: {
@@ -57,7 +57,7 @@ struct BranchSelectionCard: View {
                         Image(systemName: "phone.fill")
                             .foregroundColor(.brandOrange)
                             .font(.caption)
-                        Text(branch.phone)
+                        Text(branch.phone!)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -86,15 +86,17 @@ struct BranchSelectionCard: View {
     BranchSelectionCard(
         viewModel: BookingViewModel(),
         branch: Branch(
-            id: UUID(), barbershopId: UUID,
+            id: UUID(),
+            barbershopId: UUID(),
             name: "Central Barbershop",
             address: "Calle 72 #45-67, Barranquilla",
             latitude: 10.9878,
             longitude: -74.7889,
             phone: "+57 300 123 4567",
-            email: "central@barbershop.com",
+            imagenUrl: nil,
+            //email: "central@barbershop.com",
             isActive: true,
-            imageUrl: nil,
+            
             createdAt: Date(),
             updatedAt: Date()
         ),

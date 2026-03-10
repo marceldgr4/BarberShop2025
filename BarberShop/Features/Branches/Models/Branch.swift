@@ -12,18 +12,20 @@ struct Branch: Identifiable, Codable, Hashable{
     let barbershopId: UUID
     let name: String
     let address: String
+    let email: String
     let latitude: Double?
     let longitude: Double?
     let phone: String?
+    let imagenUrl: String?
     let isActive: Bool
     let createdAt: Date
     let updatedAt: Date
     
     enum CodingKeys: String, CodingKey{
-        case id, name, address, latitude, longitude, phone
+        case id, name, address, latitude, longitude, phone,email
         case barbershopId = "barbershop_id"
         case isActive = "is_active"
-        
+        case imagenUrl = "imagen_url"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
