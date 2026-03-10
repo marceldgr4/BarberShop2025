@@ -1,8 +1,9 @@
 import SwiftUI
+import Auth
 import PhotosUI
 
 struct EditProfileView: View {
-    let user: User?
+    let user: Profile?
     @StateObject private var viewModel = EditProfileViewModel()
     @Environment(\.dismiss) private var dismiss
     @State private var isPickerPresented = false
@@ -14,7 +15,7 @@ struct EditProfileView: View {
                 HStack {
                     Spacer()
                     VStack(spacing: 12) {
-                        AsyncImage(url: URL(string: user?.photoUrl ?? "")) { image in
+                        AsyncImage(url: URL(string: user?.avatarUrl ?? "")) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -250,16 +251,17 @@ struct EditProfileView: View {
 #Preview {
     NavigationStack {
         EditProfileView(
-            user: User(
+            user: Profile(
                 id: UUID(),
                 fullName: "Marcel Diaz",
-                phone: "+57 300 123 4567",
                 email: "marcel@example.com",
-                photoUrl: nil,
+                avatarUrl: nil,
+                phone: "+57 300 123 4567",
+                               
                 isActive: true,
                 createdAt: Date(),
                 updatedAt: Date(),
-                rolId: UUID(),
+                
             ))
     }
 }

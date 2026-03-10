@@ -70,7 +70,7 @@ struct ServiceItem: View {
 }
 
 #Preview {
-    ServiceItem(service: Service(id: UUID(),
+    ServiceItem(service: Service(id: UUID(), barbershopId: UUID(),
                                  categoryId: UUID(),
                                  name: "Corte",
                                  description: "corte con maquina y tijera",

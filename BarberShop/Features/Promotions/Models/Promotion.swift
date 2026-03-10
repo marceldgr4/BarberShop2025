@@ -11,7 +11,7 @@ struct Promotion: Identifiable, Codable{
     let barbershopId: UUID
     let title: String
     let description: String?
-    let discountPercentage: Double?
+    let discountPercentage: Int?
     let startDate: String
     let endDate: String
     let isActive:Bool
@@ -25,7 +25,7 @@ struct Promotion: Identifiable, Codable{
         case startDate = "start_date"
         case endDate = "end_date"
         case isActive = "is_active"
-        case imageUrl = "image_url"
+       case imageUrl = "image_url"
         case createdAt = "created_at"
     }
 }

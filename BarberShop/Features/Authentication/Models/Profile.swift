@@ -10,7 +10,7 @@ import Foundation
 struct Profile: Identifiable, Codable {
     let id: UUID
     let fullName: String
-    
+    let email: String
     let avatarUrl: String?
     let phone: String?
     let isActive: Bool
@@ -19,7 +19,7 @@ struct Profile: Identifiable, Codable {
 
         
     enum CodingKeys: String, CodingKey{
-        case id, phone
+        case id, phone, email
         case fullName = "full_name"
         case isActive = "is_active"
         case avatarUrl = "avatar_url"

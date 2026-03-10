@@ -17,7 +17,7 @@ struct BranchDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 
                 // MARK: - Image
-                AsyncImage(url: URL(string: branch.imageUrl ?? "")) { image in
+                AsyncImage(url: URL(string: branch.imagenUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -55,7 +55,7 @@ struct BranchDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "phone.fill")
                                 .foregroundColor(.gray)
-                            Text(branch.phone)
+                            Text(branch.phone!)
                                 .font(.subheadline)
                             
                             Spacer()
@@ -80,8 +80,8 @@ struct BranchDetailView: View {
                 HStack(spacing: 12) {
                     Button(action: {
                         let coordinate = CLLocationCoordinate2D(
-                            latitude: branch.latitude,
-                            longitude: branch.longitude
+                            latitude: branch.latitude!,
+                            longitude: branch.longitude!
                         )
                         let placemark = MKPlacemark(coordinate: coordinate)
                         let mapItem = MKMapItem(placemark: placemark)
@@ -104,7 +104,7 @@ struct BranchDetailView: View {
                     }
                     
                     Button(action: {
-                        let phoneNumber = branch.phone.filter { $0.isNumber }
+                        let phoneNumber = branch.phone!.filter { $0.isNumber }
                         if let url = URL(string: "tel://\(phoneNumber)") {
                             UIApplication.shared.open(url)
                         }
@@ -135,14 +135,14 @@ struct BranchDetailView: View {
                     
                     Map(coordinateRegion: .constant(MKCoordinateRegion(
                         center: CLLocationCoordinate2D(
-                            latitude: branch.latitude,
-                            longitude: branch.longitude
+                            latitude: branch.latitude!,
+                            longitude: branch.longitude!
                         ),
                         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                     )), annotationItems: [branch]) { branch in
                         MapMarker(coordinate: CLLocationCoordinate2D(
-                            latitude: branch.latitude,
-                            longitude: branch.longitude
+                            latitude: branch.latitude!,
+                            longitude: branch.longitude!
                         ), tint: .red)
                     }
                     .frame(height: 200)
@@ -243,15 +243,17 @@ struct BranchDetailView: View {
     NavigationStack {
         BranchDetailView(
             branch: Branch(
-                id: UUID(),
+                id: UUID(), barbershopId: UUID(),
                 name: "Center BarberShop",
                 address: "calle 72 # 45-67, Barranquilla",
+                email: "Example@prueba.com",
                 latitude: 10.9878,
                 longitude: -74.7889,
                 phone: "+57 315 xxx xxxx",
-                email: "Example@prueba.com",
+                
+                imagenUrl: nil,
                 isActive: true,
-                imageUrl: nil,
+                
                 createdAt: Date(),
                 updatedAt: Date()
             )

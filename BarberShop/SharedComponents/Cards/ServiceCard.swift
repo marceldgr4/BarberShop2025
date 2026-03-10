@@ -49,7 +49,7 @@ struct ServiceCard: View {
     }
 }
 #Preview {
-    ServiceCard(service: Service(id: UUID(),
+    ServiceCard(service: Service(id: UUID(), barbershopId: UUID(),
                                  categoryId: UUID(),
                                  name: "Corte",
                                  description: "agregra descripticion",

@@ -54,7 +54,7 @@ struct PromotionCard: View {
 }
 
 #Preview {
-    PromotionCard(promotion: Promotion(id: UUID(),
+    PromotionCard(promotion: Promotion(id: UUID(), barbershopId: UUID(),
                                        title: "Promo",
                                        description: "Agregar descripcion",
                                        discountPercentage: 30,

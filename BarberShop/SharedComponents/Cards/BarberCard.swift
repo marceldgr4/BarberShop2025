@@ -49,9 +49,9 @@ struct BarberCard: View {
         barber: BarberWithRating(
             id: UUID(),
             branchId: UUID(),
-            specialtyId: nil,
-            name: "prueba 1",
-            photoUrl: nil,
+            name: "nil",
+            photoUrl: "prueba 1",
+            specialty: nil,
             isActive: true,
             rating: 4.8,
             totalReviews: 156))
