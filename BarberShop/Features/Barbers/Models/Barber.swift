@@ -11,18 +11,23 @@ import CoreLocation
 struct Barber: Identifiable, Codable, Hashable {
     let id: UUID
     let branchId: UUID
-    let specialtyId: UUID
-    let name: String
-    let photoUrl: String
+    let userId: UUID?
+    let fullName: String
+    let photoUrl: String?
+    let specialty: String?
+    
     let isActive: Bool
     let createdAt: Date
     let updatedAt: Date
     
     enum CodingKeys: String, CodingKey{
-        case id, name
+        case id
         case branchId = "branch_id"
-        case specialtyId = "specialty_id"
+        case userId = "user_id"
+        case fullName = "full_name"
         case photoUrl = "photo_url"
+        case specialty
+        
         case isActive = "is_active"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
@@ -30,22 +35,16 @@ struct Barber: Identifiable, Codable, Hashable {
         
     }
 }
-struct BarberSpecialty: Identifiable, Codable, Hashable{
-    let id: UUID
-    let name: String
-    let description: String
-    
-}
 
-struct BarberRating: Codable {
-    let id: UUID
+
+struct BarberState: Codable {
     let barberId: UUID
     let averageRating: Double
     let totalReviews : Int
     let updatedAt: Date
     
     enum CodingKeys: String, CodingKey{
-        case id
+        
         case barberId = "barber_id"
         case averageRating = "average_rating"
         case totalReviews = "total_reviews"

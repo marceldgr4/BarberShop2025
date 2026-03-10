@@ -13,7 +13,7 @@ import Combine
 @MainActor
 class AuthViewModel: ObservableObject {
     private let authenticationService = AuthenticationService()
-    @Published var currentUser: User?
+    @Published var currentUser: Profile?
     @Published var isAuthenticated = false
     @Published var isLoading = false
     @Published var errorMessage: String?

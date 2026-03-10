@@ -94,7 +94,7 @@ struct AppointmentRow: View {
             appointment: AppointmentDetail(
                 id: UUID(),
                 appointmentDate: "2025-12-12",
-                appointmentTime: "14:30:00",
+                appointmentTime: "14:30:00", durationMinutes: 40,
                 totalPrice: 25000,
                 notes: nil,
                 statusName: "confirmed",
@@ -109,7 +109,7 @@ struct AppointmentRow: View {
             appointment: AppointmentDetail(
                 id: UUID(),
                 appointmentDate: "2025-12-15",
-                appointmentTime: "10:00:00",
+                appointmentTime: "10:00:00", durationMinutes: 40,
                 totalPrice: 18000,
                 notes: nil,
                 statusName: "pending",
@@ -124,7 +124,7 @@ struct AppointmentRow: View {
             appointment: AppointmentDetail(
                 id: UUID(),
                 appointmentDate: "2025-12-08",
-                appointmentTime: "16:00:00",
+                appointmentTime: "16:00:00", durationMinutes: 40,
                 totalPrice: 30000,
                 notes: nil,
                 statusName: "completed",

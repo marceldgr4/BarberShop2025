@@ -71,9 +71,9 @@ struct BarberSelectionCard: View {
                 barber: BarberWithRating(
                     id: UUID(),
                     branchId: UUID(),
-                    specialtyId: UUID(),
-                    name: "Carlos Martínez",
-                    photoUrl: nil,
+                    name: "UUID()",
+                    photoUrl: "Carlos Martínez",
+                    specialty: nil,
                     isActive: true,
                     rating: 4.8,
                     totalReviews: 156
@@ -87,9 +87,10 @@ struct BarberSelectionCard: View {
                 barber: BarberWithRating(
                     id: UUID(),
                     branchId: UUID(),
-                    specialtyId: UUID(),
-                    name: "Luis Rodríguez",
-                    photoUrl: nil,
+                    
+                    name: "UUID()",
+                    photoUrl: "Luis Rodríguez",
+                    specialty: nil,
                     isActive: true,
                     rating: 4.6,
                     totalReviews: 98

@@ -96,7 +96,7 @@ struct SelectBarberView: View {
     SelectBarberView(viewModel: {
         let vm = BookingViewModel()
         vm.selectedBranch = Branch(
-            id: UUID(),
+            id: UUID(), barbershopId: UUID,
             name: "Central Barbershop",
             address: "Calle 72",
             latitude: 10.9878,

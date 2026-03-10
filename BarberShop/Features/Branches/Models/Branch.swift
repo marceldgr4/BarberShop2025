@@ -9,22 +9,21 @@ import Foundation
 
 struct Branch: Identifiable, Codable, Hashable{
     let id: UUID
+    let barbershopId: UUID
     let name: String
     let address: String
-    let latitude: Double
-    let longitude: Double
-    let phone: String
-    let email: String?
+    let latitude: Double?
+    let longitude: Double?
+    let phone: String?
     let isActive: Bool
-    let imageUrl: String?
     let createdAt: Date
     let updatedAt: Date
     
     enum CodingKeys: String, CodingKey{
-        case id, name,    address, latitude, longitude,
-         phone,  email
+        case id, name, address, latitude, longitude, phone
+        case barbershopId = "barbershop_id"
         case isActive = "is_active"
-        case imageUrl = "image_url"
+        
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -37,7 +36,7 @@ struct BranchHours: Identifiable, Codable{
     let dayOfWeek: Int
     let openingTime: String
     let closingTime: String
-    let isOpen: Bool
+    let isActive: Bool
     
     enum CodingKeys: String, CodingKey{
         case id
@@ -45,6 +44,6 @@ struct BranchHours: Identifiable, Codable{
         case dayOfWeek = "day_of_week"
         case openingTime = "opening_time"
         case closingTime = "closing_time"
-        case isOpen = "is_open"
+        case isActive = "is_active"
     }
 }

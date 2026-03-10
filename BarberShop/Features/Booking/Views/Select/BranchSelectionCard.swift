@@ -86,7 +86,7 @@ struct BranchSelectionCard: View {
     BranchSelectionCard(
         viewModel: BookingViewModel(),
         branch: Branch(
-            id: UUID(),
+            id: UUID(), barbershopId: UUID,
             name: "Central Barbershop",
             address: "Calle 72 #45-67, Barranquilla",
             latitude: 10.9878,

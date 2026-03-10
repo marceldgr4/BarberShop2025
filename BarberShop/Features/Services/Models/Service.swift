@@ -9,7 +9,8 @@ import Foundation
 
 struct Service: Identifiable, Codable, Hashable{
     let id: UUID
-    let categoryId: UUID
+    let barbershopId: UUID
+    let categoryId: UUID?
     let name: String
     let description: String?
     let durationMinutes: Int
@@ -21,6 +22,7 @@ struct Service: Identifiable, Codable, Hashable{
     
     enum CodingKeys: String, CodingKey{
         case id, name, description, price
+        case barbershopId = "barbershop_id"
         case categoryId = "category_id"
         case durationMinutes = "duration_minutes"
         case imageUrl = "image_url"
