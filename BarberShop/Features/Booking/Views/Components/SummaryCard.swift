@@ -62,12 +62,13 @@ struct SummaryCard: View {
         appointment: Appointment(
             id: UUID(),
             userId: UUID(),
-            branchId: UUID(),
+            
             barberId: UUID(),
             serviceId: UUID(),
             statusId: UUID(),
             appointmentDate: "2025-01-15",
             appointmentTime: "10:00:00",
+            durationMinutes: 40,
             totalPrice: 25000,
             notes: nil,
             createdAt: Date(),

@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct UserUpdate: Encodable {
+struct ProfileUpdate: Encodable {
     let fullName: String?
     let phone: String?
-    let photoUrl: String?
+    let avatarUrl: String?
     let updatedAt: Date
     
     enum CodingKeys: String, CodingKey {
         case fullName = "full_name"
         case phone
-        case photoUrl = "photo_url"
+        case avatarUrl = "avatar_url"
         case updatedAt = "updated_at"
     }
 }

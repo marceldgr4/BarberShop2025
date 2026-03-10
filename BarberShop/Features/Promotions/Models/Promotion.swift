@@ -8,6 +8,7 @@
 import Foundation
 struct Promotion: Identifiable, Codable{
     let id: UUID
+    let barbershopId: UUID
     let title: String
     let description: String?
     let discountPercentage: Double?
@@ -19,6 +20,7 @@ struct Promotion: Identifiable, Codable{
     
     enum CodingKeys: String, CodingKey{
         case id, title,description
+        case barbershopId = "barbershop_id"
         case discountPercentage = "discount_percentage"
         case startDate = "start_date"
         case endDate = "end_date"

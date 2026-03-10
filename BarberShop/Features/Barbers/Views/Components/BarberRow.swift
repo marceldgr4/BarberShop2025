@@ -54,9 +54,9 @@ struct BarberRow: View {
         barber: BarberWithRating(
             id: UUID(),
             branchId: UUID(),
-            specialtyId: UUID(),
-            name: "juan ariza",
-            photoUrl: nil,
+            name: "",
+            photoUrl: "juan ariza",
+            specialty: nil,
             isActive: true,
             rating: 3.5,
             totalReviews: 90)
