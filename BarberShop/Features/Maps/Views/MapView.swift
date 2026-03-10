@@ -19,11 +19,11 @@ struct MapView: View {
             if !viewModel.branches.isEmpty {
                 Map(coordinateRegion: $viewModel.region,
                     annotationItems: viewModel.branches.filter {
-                        $0.latitude.isFinite && $0.longitude.isFinite
+                        $0.latitude!.isFinite && $0.longitude!.isFinite
                     }) { branch in
                     MapAnnotation(coordinate: CLLocationCoordinate2D(
-                        latitude: branch.latitude,
-                        longitude: branch.longitude
+                        latitude: branch.latitude!,
+                        longitude: branch.longitude!
                     )) {
                         BranchMapMarker(branch: branch) {
                             Task { @MainActor in
@@ -126,7 +126,7 @@ struct MapView: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 15) {
                             // Image
-                            if let imageUrl = branch.imageUrl, !imageUrl.isEmpty {
+                            if let imageUrl = branch.imagenUrl, !imageUrl.isEmpty {
                                 AsyncImage(url: URL(string: imageUrl)) { image in
                                     image
                                         .resizable()
@@ -171,7 +171,7 @@ struct MapView: View {
                                 HStack(spacing: 8) {
                                     Image(systemName: "phone.fill")
                                         .foregroundColor(.blue)
-                                    Text(branch.phone)
+                                    Text(branch.phone!)
                                         .font(.subheadline)
                                 }
                                 
@@ -189,12 +189,12 @@ struct MapView: View {
                             HStack(spacing: 12) {
                                 // Directions
                                 Button(action: {
-                                    guard branch.latitude.isFinite && branch.longitude.isFinite else {
+                                    guard branch.latitude!.isFinite && branch.longitude!.isFinite else {
                                         return
                                     }
                                     let coordinate = CLLocationCoordinate2D(
-                                        latitude: branch.latitude,
-                                        longitude: branch.longitude
+                                        latitude: branch.latitude!,
+                                        longitude: branch.longitude!
                                     )
                                     let placemark = MKPlacemark(coordinate: coordinate)
                                     let mapItem = MKMapItem(placemark: placemark)
@@ -218,7 +218,7 @@ struct MapView: View {
                                 
                                 // Call
                                 Button(action: {
-                                    let phoneNumber = branch.phone.filter { $0.isNumber }
+                                    let phoneNumber = branch.phone!.filter { $0.isNumber }
                                     guard !phoneNumber.isEmpty,
                                           let url = URL(string: "tel://\(phoneNumber)") else {
                                         return

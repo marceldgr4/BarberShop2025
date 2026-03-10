@@ -39,7 +39,7 @@ struct BranchRowItem: View {
                 HStack(spacing: 4) {
                     Image(systemName: "phone.fill")
                         .font(.caption2)
-                    Text(branch.phone!)
+                    Text(branch.phone)
                         .font(.caption)
                 }
                 .foregroundColor(.brandAccent)

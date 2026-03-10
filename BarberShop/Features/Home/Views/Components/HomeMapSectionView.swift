@@ -24,7 +24,7 @@ struct HomeMapSectionView: View {
             
             if !viewModel.branches.isEmpty{
                 Map(coordinateRegion: $viewModel.mapRegion, annotationItems: viewModel.branches){
-                    Branch in MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: Branch.latitude, longitude: Branch.longitude)){
+                    Branch in MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: Branch.latitude!, longitude: Branch.longitude!)){
                         BranchMapMarker(branch: Branch){
                             viewModel.selectBranch(Branch)
                         }

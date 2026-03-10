@@ -35,7 +35,8 @@ class AppointmentViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            appointments = try await appointmentService.fecthUserAppointments()
+            
+            appointments = try await appointmentService.fetchUserAppointments()
             print("✅ Loaded \(appointments.count) appointments")
         } catch {
             errorMessage = error.localizedDescription
@@ -63,11 +64,12 @@ class AppointmentViewModel: ObservableObject {
         
         do {
             _ = try await appointmentService.createAppointment(
-                branchId: branch.id,
+                //branchId: branch.id,
                 barberId: barber.id,
                 serviceId: service.id,
                 date: dateString,
                 time: selectedTime,
+                durationMinutes: service.durationMinutes,
                 price: service.price,
                 notes: notes.isEmpty ? nil : notes
             )

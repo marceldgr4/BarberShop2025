@@ -55,7 +55,7 @@ struct BranchDetailView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "phone.fill")
                                 .foregroundColor(.gray)
-                            Text(branch.phone!)
+                            Text(branch.phone)
                                 .font(.subheadline)
                             
                             Spacer()
@@ -104,7 +104,7 @@ struct BranchDetailView: View {
                     }
                     
                     Button(action: {
-                        let phoneNumber = branch.phone!.filter { $0.isNumber }
+                        let phoneNumber = branch.phone.filter { $0.isNumber }
                         if let url = URL(string: "tel://\(phoneNumber)") {
                             UIApplication.shared.open(url)
                         }

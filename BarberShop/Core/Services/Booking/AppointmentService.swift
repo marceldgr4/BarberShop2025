@@ -16,7 +16,7 @@ final class AppointmentService {
 
     /// Crea una nueva cita
     func createAppointment(
-        userId: UUID,
+        //userId: UUID,
         barberId: UUID,
         serviceId: UUID,
         date: String,

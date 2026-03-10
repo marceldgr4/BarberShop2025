@@ -144,15 +144,15 @@ struct BranchBarbersViewPreview: View {
     var body: some View {
         BranchBarbersView(
             branch: Branch(
-                id: UUID(),
+                id: UUID(), barbershopId:UUID(),
                 name: "Central Barbershop",
                 address: "Calle 72 #45-67",
+                email: "central@barbershop.com",
                 latitude: 10.9878,
                 longitude: -74.7889,
                 phone: "+57 300 123 4567",
-                email: "central@barbershop.com",
+                imagenUrl: nil,
                 isActive: true,
-                imageUrl: nil,
                 createdAt: Date(),
                 updatedAt: Date()
             )
@@ -167,9 +167,9 @@ struct BranchBarbersViewPreview: View {
                         BarberWithRating(
                             id: UUID(),
                             branchId: UUID(),
-                            specialtyId: UUID(),
-                            name: "Carlos Martínez",
-                            photoUrl: nil,
+                            name: "UUID()",
+                            photoUrl: "Carlos Martínez",
+                            specialty: nil,
                             isActive: true,
                             rating: 4.8,
                             totalReviews: 156
@@ -177,9 +177,9 @@ struct BranchBarbersViewPreview: View {
                         BarberWithRating(
                             id: UUID(),
                             branchId: UUID(),
-                            specialtyId: UUID(),
-                            name: "Luis Rodríguez",
-                            photoUrl: nil,
+                            name: "UUID()",
+                            photoUrl: "Luis Rodríguez",
+                            specialty: nil,
                             isActive: true,
                             rating: 4.6,
                             totalReviews: 98
@@ -187,9 +187,9 @@ struct BranchBarbersViewPreview: View {
                         BarberWithRating(
                             id: UUID(),
                             branchId: UUID(),
-                            specialtyId: UUID(),
-                            name: "Pedro Gómez",
-                            photoUrl: nil,
+                            name: "UUID()",
+                            photoUrl: "Pedro Gómez",
+                            specialty: nil,
                             isActive: true,
                             rating: 4.9,
                             totalReviews: 203

@@ -51,11 +51,11 @@ class HomeViewModel: ObservableObject {
             
             // Centrar mapa en la primera sucursal válida
             if let firstBranch = branches.first,
-               firstBranch.latitude.isFinite,
-               firstBranch.longitude.isFinite {
+               firstBranch.latitude!.isFinite,
+               firstBranch.longitude!.isFinite {
                 mapRegion.center = CLLocationCoordinate2D(
-                    latitude: firstBranch.latitude,
-                    longitude: firstBranch.longitude
+                    latitude: firstBranch.latitude!,
+                    longitude: firstBranch.longitude!
                 )
             }
             
@@ -92,15 +92,15 @@ class HomeViewModel: ObservableObject {
     // MARK: - Select Branch
     func selectBranch(_ branch: Branch) {
         // Validar coordenadas antes de actualizar
-        guard branch.latitude.isFinite && branch.longitude.isFinite else {
+        guard branch.latitude!.isFinite && branch.longitude!.isFinite else {
             print("⚠️ Invalid coordinates for branch: \(branch.name)")
             return
         }
         
         selectedBranch = branch
         mapRegion.center = CLLocationCoordinate2D(
-            latitude: branch.latitude,
-            longitude: branch.longitude
+            latitude: branch.latitude!,
+            longitude: branch.longitude!
         )
         mapRegion.span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     }

@@ -30,7 +30,7 @@ class ProfileViewModel: ObservableObject {
         
         do{
             async let userTask = profile.getCurrentUser()
-            async let appointmentsTask = appointmentService.fecthUserAppointments()
+            async let appointmentsTask = appointmentService.fetchUserAppointments()
             async let favoritesTask = favoriteService.fetchFavoriteBarbers()
             
             user = try await userTask
