@@ -15,7 +15,7 @@ struct Branch: Identifiable, Codable, Hashable{
     let email: String
     let latitude: Double?
     let longitude: Double?
-    let phone: String?
+    let phone: String
     let imagenUrl: String?
     let isActive: Bool
     let createdAt: Date

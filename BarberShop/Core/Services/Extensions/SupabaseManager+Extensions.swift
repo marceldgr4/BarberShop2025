@@ -89,7 +89,7 @@ extension SupabaseManagerSecure {
     ) async throws -> Appointment {
         let appointmentService = AppointmentService(client: client)
         return try await appointmentService.createAppointment(
-            userId: userId,
+            //userId: userId,
             barberId: barberId,
             serviceId: serviceId,
             date: date,

@@ -25,11 +25,12 @@ extension BookingViewModel{
             let service = selectedServices[0]
             
             bookingConfirmation = try await appointmentService.createAppointment(
-                branchId: branch.id,
+               // branchId: branch.id,
                 barberId: barber.id,
                 serviceId: service.id,
                 date: date,
                 time: time,
+                durationMinutes: totalDuration,
                 price: totalPrice,
                 notes: notes.isEmpty ? nil : notes
             )

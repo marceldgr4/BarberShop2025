@@ -49,11 +49,11 @@ class MapViewModel: ObservableObject {
             
             // Solo centrar si hay sucursales válidas
             if let firstBranch = branches.first,
-               firstBranch.latitude.isFinite,
-               firstBranch.longitude.isFinite {
+               firstBranch.latitude!.isFinite,
+               firstBranch.longitude!.isFinite {
                 region.center = CLLocationCoordinate2D(
-                    latitude: firstBranch.latitude,
-                    longitude: firstBranch.longitude
+                    latitude: firstBranch.latitude!,
+                    longitude: firstBranch.longitude!
                 )
             }
         } catch {
@@ -65,25 +65,25 @@ class MapViewModel: ObservableObject {
     
     func selectBranch(_ branch: Branch) {
         // Validar coordenadas antes de actualizar
-        guard branch.latitude.isFinite && branch.longitude.isFinite else {
+        guard branch.latitude!.isFinite && branch.longitude!.isFinite else {
             return
         }
         
         region.center = CLLocationCoordinate2D(
-            latitude: branch.latitude,
-            longitude: branch.longitude
+            latitude: branch.latitude!,
+            longitude: branch.longitude!
         )
         region.span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     }
     
     func recenterMap() {
         if let firstBranch = branches.first,
-           firstBranch.latitude.isFinite,
-           firstBranch.longitude.isFinite {
+           firstBranch.latitude!.isFinite,
+           firstBranch.longitude!.isFinite {
             region = MKCoordinateRegion(
                 center: CLLocationCoordinate2D(
-                    latitude: firstBranch.latitude,
-                    longitude: firstBranch.longitude
+                    latitude: firstBranch.latitude!,
+                    longitude: firstBranch.longitude!
                 ),
                 span: MKCoordinateSpan(latitudeDelta: 0.15, longitudeDelta: 0.15)
             )

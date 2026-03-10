@@ -90,11 +90,12 @@ struct BranchSelectionCard: View {
             barbershopId: UUID(),
             name: "Central Barbershop",
             address: "Calle 72 #45-67, Barranquilla",
+            email: "central@barbershop.com",
             latitude: 10.9878,
             longitude: -74.7889,
             phone: "+57 300 123 4567",
             imagenUrl: nil,
-            //email: "central@barbershop.com",
+            
             isActive: true,
             
             createdAt: Date(),
