@@ -18,8 +18,8 @@ struct BreakTime: Identifiable, Codable{
         case id
         case barberId = "barber_id"
         case breakType = "break_type"
-        case startTime = "startTime"
-        case endTime = "end_Time"
+        case startTime = "start_time"
+        case endTime = "end_time"
         case dayOfWeek = "day_of_week"
     }
     

@@ -22,7 +22,7 @@ struct TimeBlock: Identifiable, Codable, Hashable{
         case id, date
         case barberId  = "barber_id"
         case startTime = "start_time"
-        case endTime = "end_star"
+        case endTime = "end_time"
         case isBooked = "is_booked"
         case appointmentId = "appointment_id"
         case blockType = "block_type"

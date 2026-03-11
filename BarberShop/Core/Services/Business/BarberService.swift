@@ -27,7 +27,7 @@ final class BarberService {
                     full_name, 
                     photo_url,
                     is_active,
-                    barber_ratings!inner(average_rating, total_reviews)
+                    barber_stats!inner(average_rating, total_reviews)
                 """
             )
             .eq("is_active", value: true)
@@ -44,7 +44,7 @@ final class BarberService {
                 let branchId = dict["branch_id"] as? String,
                 let name = dict["full_name"] as? String,
                 let isActive = dict["is_active"] as? Bool,
-                let ratings = dict["barber_ratings"] as? [String: Any],
+                let ratings = dict["barber_stats"] as? [String: Any],
                 let avgRating = ratings["average_rating"] as? Double,
                 let totalReviews = ratings["total_reviews"] as? Int
             else { return nil }
