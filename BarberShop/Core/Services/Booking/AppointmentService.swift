@@ -91,7 +91,7 @@ final class AppointmentService {
                     duration_minutes,
                     total_price,
                     notes,
-                    appointment_status!inner(name),
+                    appointment_statuses!inner(name),
                     barbers!inner(full_name, photo_url, branches!inner(name, address)),
                     services!inner(name)
                 """
@@ -109,7 +109,7 @@ final class AppointmentService {
                 let date = dict["appointment_date"] as? String,
                 let time = dict["appointment_time"] as? String,
                 let price = dict["total_price"] as? Double,
-                let status = dict["appointment_status"] as? [String: Any],
+                let status = dict["appointment_statuses"] as? [String: Any],
                 let statusName = status["name"] as? String,
                 let barber = dict["barbers"] as? [String: Any],
                 let barberName = barber["full_name"] as? String,
@@ -195,7 +195,7 @@ final class AppointmentService {
                     duration_minutes,
                     total_price,
                     notes,
-                    appointment_status!inner(name),
+                    appointment_statuses!inner(name),
                     barbers!inner(full_name, photo_url, branches!inner(name, address)),
                     services!inner(name)
                 """
@@ -214,7 +214,7 @@ final class AppointmentService {
                 let date = dict["appointment_date"] as? String,
                 let time = dict["appointment_time"] as? String,
                 let price = dict["total_price"] as? Double,
-                let status = dict["appointment_status"] as? [String: Any],
+                let status = dict["appointment_statuses"] as? [String: Any],
                 let statusName = status["name"] as? String,
                 let barber = dict["barbers"] as? [String: Any],
                 let barberName = barber["full_name"] as? String,
