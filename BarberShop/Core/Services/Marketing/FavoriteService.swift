@@ -63,7 +63,7 @@ final class FavoriteService {
                         full_name, 
                         photo_url,                    
                         is_active,
-                        barber_ratings(average_rating, total_reviews)
+                        barber_stats(average_rating, total_reviews)
                     )
                 """
             )
@@ -83,7 +83,7 @@ final class FavoriteService {
             var rating: Double?
             var totalReviews: Int?
 
-            if let ratings = barber["barber_ratings"] as? [String: Any] {
+            if let ratings = barber["barber_stats"] as? [String: Any] {
                 rating = ratings["average_rating"] as? Double
                 totalReviews = ratings["total_reviews"] as? Int
             }

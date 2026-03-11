@@ -25,7 +25,7 @@ struct BarberSchedule: Identifiable, Codable{
         case endTime = "end_time"
         case isAvailable = "is_available"
         case createdAt = "created_at"
-        case updatedAt = "update_at"
+        case updatedAt = "updated_at"
     }
     
     var dayName: String{
