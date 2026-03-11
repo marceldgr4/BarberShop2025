@@ -66,16 +66,19 @@ final class NotificationService: ObservableObject{
         )
         notifications.insert(notificacion, at: 0)
         saveNotification()
-        
         scheduleLocalNotification(notificacion)
+        Task{@MainActor in updateUnreadCount()
+        }
     }
     
     func markAsRead(_ id:UUID){
         if let index = notifications.firstIndex(where: {$0.id == id}){
             notifications[index].isRead = true
             saveNotification()
+            Task{@MainActor in updateUnreadCount()}
         }
     }
+    
     func markAllsRead(){
         notifications = notifications.map{ var n = $0; n.isRead = true; return n}
         saveNotification()
@@ -91,7 +94,10 @@ final class NotificationService: ObservableObject{
     
     private func updateUnreadCount(){
         unreadCount = notifications.filter{!$0.isRead}.count
-        UIApplication.shared.applicationIconBadgeNumber = unreadCount
+        DispatchQueue.main.async {
+            
+            UIApplication.shared.applicationIconBadgeNumber = self.unreadCount
+        }
     }
     
     private func scheduleLocalNotification(_ notification: Notification){

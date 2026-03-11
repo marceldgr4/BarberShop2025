@@ -37,20 +37,28 @@ class BaseViewModel: ObservableObject {
         onSucces: @escaping(T) -> Void = { _ in }
     )
     async {
-        loadingState = .loading
-        isLoading = true
-        errorMessage = nil
-        
+        await MainActor.run{
+            loadingState = .loading
+            isLoading = true
+            errorMessage = nil
+        }
         do{
             let result = try await operation()
-            loadingState = .loaded
-            onSucces(result)
+            await MainActor.run{
+                loadingState = .loaded
+                onSucces(result)
+            }
         } catch {
+        
             let message = handleError(error)
+            await MainActor.run{
             loadingState = .error(message)
             errorMessage = message
         }
-        isLoading = false
+    }
+        await MainActor.run{
+            isLoading = false
+        }
     }
     
     private func handleError(_ error: Error) -> String{

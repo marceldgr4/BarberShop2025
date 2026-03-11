@@ -33,60 +33,62 @@ class HomeViewModel: ObservableObject {
     
     // MARK: - Load Home Data
     func loadHomeData() async {
-        isLoading = true
-        errorMessage = nil
+        await MainActor.run {
+            isLoading = true
+            errorMessage = nil
+        }
         
         do {
-            // Cargar datos en paralelo
             async let branchesTask = branchService.fetchBranches()
             async let servicesTask = serviceService.fetchServices()
             async let promotionsTask = promotionService.fetchActivePromotions()
             async let barbersTask = barberService.fetchBarbers()
             
-            // Esperar todos los resultados
-            branches = try await branchesTask
-            services = try await servicesTask
-            promotions = try await promotionsTask
-            featuredBarbers = try await barbersTask
+            // ✅ Esperar todos los resultados una sola vez
+            let (fetchedBranches, fetchedServices, fetchedPromotions, fetchedBarbers) = try await (
+                branchesTask, servicesTask, promotionsTask, barbersTask
+            )
             
-            // Centrar mapa en la primera sucursal válida
-            if let firstBranch = branches.first,
-               firstBranch.latitude!.isFinite,
-               firstBranch.longitude!.isFinite {
-                mapRegion.center = CLLocationCoordinate2D(
-                    latitude: firstBranch.latitude!,
-                    longitude: firstBranch.longitude!
-                )
+            // ✅ Asignar los resultados ya resueltos, sin try await
+            await MainActor.run {
+                branches = fetchedBranches
+                services = fetchedServices
+                promotions = fetchedPromotions
+                featuredBarbers = fetchedBarbers
+                
+                // Centrar mapa
+                if let firstBranch = fetchedBranches.first,
+                   let lat = firstBranch.latitude,
+                   let lng = firstBranch.longitude,
+                   lat.isFinite && lng.isFinite {
+                    mapRegion.center = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                }
+                
+                isLoading = false
             }
             
-            print("<-OK-> HomeViewModel: Data loaded successfully")
-            print("<-OK-> Branches: \(branches.count)")
-            print("<-OK-> Services: \(services.count)")
-            print("<-OK-> Promotions: \(promotions.count)")
-            print("<-OK-> Barbers: \(featuredBarbers.count)")
-            
+           
         } catch {
-            errorMessage = "Failed to load data: \(error.localizedDescription)"
-            print("<-X-> HomeViewModel Error: \(error)")
+            await MainActor.run {
+                errorMessage = "Failed to load data: \(error.localizedDescription)"
+                isLoading = false
+            }
             
-            // Imprimir detalles del error para debugging
             if let decodingError = error as? DecodingError {
                 switch decodingError {
                 case .dataCorrupted(let context):
-                    print("   Data corrupted: \(context)")
+                    print("Data corrupted: \(context)")
                 case .keyNotFound(let key, let context):
-                    print("   Key '\(key)' not found: \(context.debugDescription)")
+                    print("Key '\(key)' not found: \(context.debugDescription)")
                 case .typeMismatch(let type, let context):
-                    print("   Type '\(type)' mismatch: \(context.debugDescription)")
+                    print("Type '\(type)' mismatch: \(context.debugDescription)")
                 case .valueNotFound(let type, let context):
-                    print("   Value '\(type)' not found: \(context.debugDescription)")
+                    print("Value '\(type)' not found: \(context.debugDescription)")
                 @unknown default:
-                    print("   Unknown decoding error")
+                    print("Unknown decoding error")
                 }
             }
         }
-        
-        isLoading = false
     }
     
     // MARK: - Select Branch

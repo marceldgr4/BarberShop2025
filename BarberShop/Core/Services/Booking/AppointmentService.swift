@@ -4,10 +4,11 @@ import Supabase
 final class AppointmentService {
 
     internal let client: SupabaseClient
-    private let decoder = JSONDecoder()
+    private let decoder : JSONDecoder
 
     init(client: SupabaseClient = SupabaseManagerSecure.shared.client) {
         self.client = client
+        self.decoder = SupabaseManagerSecure.shared.decoder
     }
 
     convenience init() {

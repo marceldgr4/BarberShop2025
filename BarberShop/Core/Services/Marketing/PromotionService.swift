@@ -17,19 +17,29 @@ final class PromotionService{
     }
     /// Obtiene las promociones activas vigentes hoy
     func fetchActivePromotions() async throws -> [Promotion] {
-        let today = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        let todayString = formatter.string(from: today)
+        formatter.locale = Locale(identifier: "en_US_POSIX") // ✅ Locale fijo
+        formatter.timeZone = TimeZone(identifier: "UTC")      // ✅ Timezone consistente
+        let todayString = formatter.string(from: Date())
+        
+        print("🔍 Fetching promotions for date: \(todayString)")
         
         let response = try await client
             .from("promotions")
             .select()
             .eq("is_active", value: true)
-            .lte("start_date", value: todayString)
-            .gte("end_date", value: todayString)
-            .execute()
+            .execute() // ✅ Quitar filtros de fecha temporalmente para diagnosticar
         
-        return try decoder.decode([Promotion].self, from: response.data)
+        let promotions = try decoder.decode([Promotion].self, from: response.data)
+        print("✅ Total promotions fetched: \(promotions.count)")
+        
+        // Filtrar en Swift mientras diagnosticas
+        let filtered = promotions.filter { promotion in
+            promotion.startDate <= todayString && promotion.endDate >= todayString
+        }
+        print("✅ Active promotions after filter: \(filtered.count)")
+        
+        return filtered
     }
 }
